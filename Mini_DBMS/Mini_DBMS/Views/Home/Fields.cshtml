@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Fields";
+}
+
+@model Mini_DBMS.Models.Table
+
+<script src="~/Scripts/customs/addAll.js"></script>
+
+<div class="pull-left">
+    @Html.ActionLink("Go back", "GoToTables", "Home")
+</div>
+
+<h2>Fields for table @Model.Name</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th>Length</th>
+            <th>
+                Is primary key
+            </th>
+            <th>
+                Is foreign key
+            </th>
+            <th>
+                Allow nulls
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var field in Model.Fields)
+        {
+            <tr>
+
+                <td>
+                    @field.Name
+                </td>
+                <td>
+                    @field.Type.ToString()
+                </td>
+                <td>
+                    @field.Length
+                </td>
+                <td>
+                    <input type="checkbox" checked="@field.IsPrimaryKey" disabled="disabled" />
+                </td>
+                <td>
+                    <input type="checkbox" checked="@field.IsForeignKey" disabled="disabled" />
+                </td>
+                <td>
+                    <input type="checkbox" checked="@field.AllowNull" disabled="disabled" />
+                </td>
+                
+            </tr>
+        }
+        </tbody>
+</table>
+
+<div class="pull-right">
+    <input type="button" value="Add field" onclick="AddFields()" />
+</div>
+
+<div id="myModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

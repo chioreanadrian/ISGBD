@@ -1,0 +1,32 @@
+﻿@model Mini_DBMS.Models.Database
+
+@using (Ajax.BeginForm("CreateDatabase", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "CreateDatabaseModal"
+}))
+{
+
+    <fieldset>
+        <h3>Create database</h3>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Database name</label>
+            @Html.TextBoxFor(m => m.Name, new { id = "name", @class = "form-control", placeholder = "Database name" })
+        </div>
+
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Create<div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+    </fieldset>
+}
+

@@ -1,0 +1,61 @@
+﻿@using Mini_DBMS.Models
+
+@model Mini_DBMS.Models.Field
+
+@using (Ajax.BeginForm("CreateField", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "CreateFieldModal"
+}))
+{
+
+    <fieldset>
+        <h3>Create table</h3>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Table name</label>
+            @Html.TextBoxFor(m => m.Name, new { id = "name", @class = "form-control", placeholder = "Field name" })
+        </div>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Selectează materia</label>
+            @Html.DropDownListFor(m => m.Type, new SelectList(Enum.GetValues(typeof(FieldType))), "Select type", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Length</label>
+            @Html.TextBoxFor(m => m.Length, new { id = "length", @class = "form-control", placeholder = "Field length" })
+        </div>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Primary key</label>
+            @Html.CheckBoxFor(x => x.IsPrimaryKey)
+        </div>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Foreign key</label>
+            @Html.CheckBoxFor(x => x.IsForeignKey)
+        </div>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Allow null</label>
+            @Html.CheckBoxFor(x => x.AllowNull)
+        </div>
+
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Create<div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+    </fieldset>
+}
+
+
+
