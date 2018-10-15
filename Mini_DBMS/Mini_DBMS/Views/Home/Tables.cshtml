@@ -16,23 +16,33 @@
 <table class="table">
     <thead>
         <tr>
-            <td>
+            <th>
                 Name
-            </td>
+            </th>
+            <th>
+                No of fields
+            </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
-    @*<tbody>
+    <tbody>
         @foreach (var table in Model.Tables)
         {
-            <tr>
-
-                
-                <td>
-                    @table.Name
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @table.Name
+            </td>
+            <td>
+                @table.Fields.Count
+            </td>
+            <td>
+                <input type="button" value="Drop" onclick="DropTable()" />
+            </td>
+        </tr>
         }
-    </tbody>*@
+    </tbody>
 </table>
 
 <div class="pull-right">

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using Mini_DBMS.Helpers;
 
 namespace Mini_DBMS.Controllers
 {
@@ -11,22 +12,27 @@ namespace Mini_DBMS.Controllers
     {
         private static Database currentDatabase;
         private static Table currentTable;
-        private static string folderPath;
-        private static List<XElement> databasesXElements;
+        //private static string folderPath;
+        private static List<Database> databases;
+        private static XMLOperation XMLOperationHelper;
 
         public HomeController()
         {
-            folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//DBMS.xml";
+            XMLOperationHelper = new XMLOperation();
+            databases = XMLOperationHelper.ReadFromFile();
+            XMLOperationHelper.WriteToFile(databases);
+
+            //folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//DBMS.xml";
         }
 
         public ActionResult Index()
         {
-            var xmlStr = System.IO.File.ReadAllText(folderPath);
-            var str = XElement.Parse(xmlStr);
+            //var xmlStr = System.IO.File.ReadAllText(folderPath);
+            //var str = XElement.Parse(xmlStr);
 
-            var result = str.Elements("Database").ToList();
+            //var result = str.Elements("Database").ToList();
 
-            return View(result);
+            return View(databases);
         }
 
         [HttpGet]
@@ -34,7 +40,7 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateDatabase(Database database)
         { 
-            SaveDBToXML(database);
+            //SaveDBToXML(database);
             currentDatabase = database;
             return View("Tables", currentDatabase);
         }
@@ -45,7 +51,7 @@ namespace Mini_DBMS.Controllers
         public ActionResult CreateTable(Table table)
         {
             currentTable = table;
-            SaveTableToXML(table, currentDatabase);
+            //SaveTableToXML(table, currentDatabase);
 
             return View("Fields", currentTable);
         }
@@ -73,24 +79,24 @@ namespace Mini_DBMS.Controllers
             return View("Index");
         }
 
-        public void SaveDBToXML(Database db)
-        {
-            XDocument doc = XDocument.Load(folderPath);
-            XElement root = new XElement("Database");
-            root.Add(new XAttribute("name", db.Name));
-            root.Add(new XElement("tables", db.Tables));
-            doc.Element("Databases").Add(root);
-            doc.Save(folderPath);
-        }
+        //public void SaveDBToXML(Database db)
+        //{
+        //    XDocument doc = XDocument.Load(folderPath);
+        //    XElement root = new XElement("Database");
+        //    root.Add(new XAttribute("name", db.Name));
+        //    root.Add(new XElement("tables", db.Tables));
+        //    doc.Element("Databases").Add(root);
+        //    doc.Save(folderPath);
+        //}
 
-        public void SaveTableToXML(Table table, Database db)
-        {
-            var xmlStr = System.IO.File.ReadAllText(folderPath);
-            var str = XElement.Parse(xmlStr);
+        //public void SaveTableToXML(Table table, Database db)
+        //{
+        //    var xmlStr = System.IO.File.ReadAllText(folderPath);
+        //    var str = XElement.Parse(xmlStr);
 
-            var database = str.Elements("Database").FirstOrDefault(x => x.FirstAttribute.Value == db.Name);
+        //    var database = str.Elements("Database").FirstOrDefault(x => x.FirstAttribute.Value == db.Name);
 
-            database?.Element("tables").Add();
-        }
+        //    database?.Element("tables").Add();
+        //}
     }
 }
