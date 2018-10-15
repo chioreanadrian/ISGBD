@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-@model List<Mini_DBMS.Models.Database>
+@model List<System.Xml.Linq.XElement>
 
 <script src="~/Scripts/customs/addAll.js"></script>
 
@@ -20,10 +20,10 @@
             @foreach (var database in @Model)
             {
                 <tr>
-                    <td>@database.Name</td>
-                    <td>@database.Tables.Count</td>
+                    <td>@database.FirstAttribute.Value</td>
+                    <td>@database.Element("tables").Value.</td>
                 </tr>
-            }
+            }ab
         </tbody>
     </table>
 
