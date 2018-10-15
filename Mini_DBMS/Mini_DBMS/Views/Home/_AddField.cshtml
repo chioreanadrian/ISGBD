@@ -17,20 +17,20 @@
 {
 
     <fieldset>
-        <h3>Create table</h3>
+        <h3>Create Field</h3>
 
         <div class="form-group label-static is-empty">
-            <label class="control-label">Table name</label>
+            <label class="control-label">Field name</label>
             @Html.TextBoxFor(m => m.Name, new { id = "name", @class = "form-control", placeholder = "Field name" })
         </div>
 
         <div class="form-group label-static is-empty">
-            <label class="control-label">Selectează materia</label>
+            <label class="control-label">Field type</label>
             @Html.DropDownListFor(m => m.Type, new SelectList(Enum.GetValues(typeof(FieldType))), "Select type", new { @class = "form-control" })
         </div>
 
         <div class="form-group label-static is-empty">
-            <label class="control-label">Length</label>
+            <label class="control-label">Field length</label>
             @Html.TextBoxFor(m => m.Length, new { id = "length", @class = "form-control", placeholder = "Field length" })
         </div>
 
