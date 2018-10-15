@@ -1,38 +1,41 @@
-﻿using Mini_DBMS.Models;
-using System;
+﻿using System;
+using Mini_DBMS.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace Mini_DBMS.Controllers
 {
     public class HomeController : Controller
     {
-        private static List<Database> databases;
         private static Database currentDatabase;
         private static Table currentTable;
+        private static string folderPath;
+        private static List<XElement> databasesXElements;
 
         public HomeController()
         {
-            databases = new List<Database>();
+            folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//DBMS.xml";
         }
 
         public ActionResult Index()
         {
-            // get databases from file
-            return View(databases);
+            var xmlStr = System.IO.File.ReadAllText(folderPath);
+            var str = XElement.Parse(xmlStr);
+
+            var result = str.Elements("Database").ToList();
+
+            return View(result);
         }
 
         [HttpGet]
         public ActionResult CreateDatabase() => PartialView("_CreateDatabase", new Database());
 
         public ActionResult CreateDatabase(Database database)
-        {
-
+        { 
+            SaveDBToXML(database);
             currentDatabase = database;
-            currentDatabase.Tables = new List<Table>();
-
             return View("Tables", currentDatabase);
         }
 
@@ -42,7 +45,7 @@ namespace Mini_DBMS.Controllers
         public ActionResult CreateTable(Table table)
         {
             currentTable = table;
-            currentTable.Fields = new List<Field>();
+            SaveTableToXML(table, currentDatabase);
 
             return View("Fields", currentTable);
         }
@@ -60,17 +63,34 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult GoToTables()
         {
-            currentDatabase.Tables.Add(currentTable);
 
-            return View("Tables", currentDatabase);
+            return View("Tables");
         }
 
         [HttpGet]
         public ActionResult GoToDatabases()
         {
-            databases.Add(currentDatabase);
+            return View("Index");
+        }
 
-            return View("Index", databases);
+        public void SaveDBToXML(Database db)
+        {
+            XDocument doc = XDocument.Load(folderPath);
+            XElement root = new XElement("Database");
+            root.Add(new XAttribute("name", db.Name));
+            root.Add(new XElement("tables", db.Tables));
+            doc.Element("Databases").Add(root);
+            doc.Save(folderPath);
+        }
+
+        public void SaveTableToXML(Table table, Database db)
+        {
+            var xmlStr = System.IO.File.ReadAllText(folderPath);
+            var str = XElement.Parse(xmlStr);
+
+            var database = str.Elements("Database").FirstOrDefault(x => x.FirstAttribute.Value == db.Name);
+
+            database?.Element("tables").Add();
         }
     }
 }
