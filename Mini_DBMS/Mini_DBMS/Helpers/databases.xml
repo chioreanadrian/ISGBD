@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDatabases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Databases>
+    <DatabaseName>database1</DatabaseName>
+    <Tables>
+      <TableName>table1</TableName>
+      <Attributes>
+        <Name>field1</Name>
+        <Type>varchar</Type>
+        <Length>0</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </Attributes>
+    </Tables>
+  </Databases>
+  <Databases>
+    <DatabaseName>database2</DatabaseName>
+    <Tables>
+      <TableName>table2</TableName>
+      <Attributes>
+        <Name>field2</Name>
+        <Type>varchar</Type>
+        <Length>0</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </Attributes>
+    </Tables>
+  </Databases>
+  <Databases>
+    <DatabaseName>database3</DatabaseName>
+    <Tables>
+      <TableName>table3</TableName>
+      <Attributes>
+        <Name>field3</Name>
+        <Type>varchar</Type>
+        <Length>0</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </Attributes>
+    </Tables>
+  </Databases>
+</ArrayOfDatabases>

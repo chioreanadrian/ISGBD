@@ -16,32 +16,38 @@
 <table class="table">
     <thead>
         <tr>
-            <td>
+            <th>
                 Name
-            </td>
+            </th>
+            <th>
+                No of fields
+            </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
-    @*<tbody>
+    <tbody>
         @foreach (var table in Model.Tables)
         {
-            <tr>
-
-                
-                <td>
-                    @table.Name
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @table.Name
+            </td>
+            <td>
+                @table.Fields.Count
+            </td>
+            <td>
+                <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteTable", "Home", new { tableName = table.Name })'" />
+            </td>
+        </tr>
         }
-    </tbody>*@
+    </tbody>
 </table>
 
 <div class="pull-right">
     <input type="button" value="Add table" onclick="AddTable()" />
 </div>
-
-@*<div class="pull-right">
-    <input type="button" value="Save changes" onclick="ReturnToHome(@Model.Name, @Model.Tables)" />
-</div>*@
 
 <div id="myModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
