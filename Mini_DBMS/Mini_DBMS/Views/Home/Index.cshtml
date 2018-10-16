@@ -15,18 +15,26 @@
                 <th>Name</th>
                 <th>No of tables</th>
                 <th></th>
+                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var database in @Model)
             {
-                <tr>
-                    <td>@database.Name</td>
-                    <td>@database.Tables.Count</td>
-                    <td>
-                        <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteDatabase", "Home", new { databaseName = database.Name })'"/>
-                    </td>
-                </tr>
+            <tr>
+                <td>@database.Name</td>
+                <td>@database.Tables.Count</td>
+                <td>
+                    <input type="button" value="Add table" onclick="location.href='@Url.Action("CreateTable", "Home", new { databaseName = database.Name })'" />
+                </td>
+                <td>
+                    <input type="button" value="Add field" onclick="location.href='@Url.Action("CreateField", "Home", new { databaseName = database.Name })'" />
+                </td>
+                <td>
+                    <input type="button" value="Delete" onclick="location.href='@Url.Action("DeleteDatabase", "Home", new { databaseName = database.Name })'" />
+                </td>
+            </tr>
             }
         </tbody>
     </table>

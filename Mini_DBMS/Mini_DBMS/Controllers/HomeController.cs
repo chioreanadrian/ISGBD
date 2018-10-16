@@ -29,6 +29,8 @@ namespace Mini_DBMS.Controllers
             currentDatabase = database;
             currentDatabase.Tables = new List<Table>();
 
+            if (databases.Select(d => d.Name).ToList().Contains(database.Name)) return View("Index", databases);
+
             databases.Add(database);
             XMLOperationHelper.WriteToFile(databases);
 
