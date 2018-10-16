@@ -45,6 +45,16 @@ namespace Mini_DBMS.Controllers
             currentTable = table;
             currentTable.Fields = new List<Field>();
 
+            //cum iei numele la baza de date din URL sa ajunga aici?
+            // IN LOC DE currentDatabase.Name
+            // asta o sa crape
+            if (databases.FirstOrDefault(d => d.Name == currentDatabase.Name).Tables.Select(t => t.Name).ToList().Contains(table.Name))
+                return View("Index", databases);
+
+            databases.FirstOrDefault(db => db.Name == currentDatabase.Name)?.Tables.Add(table);
+
+            XMLOperationHelper.WriteToFile(databases);
+
             return View("Fields", currentTable);
         }
 
