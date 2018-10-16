@@ -38,7 +38,7 @@
                 @table.Fields.Count
             </td>
             <td>
-                <input type="button" value="Drop" onclick="DropTable()" />
+                <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteTable", "Home", new { tableName = table.Name })'" />
             </td>
         </tr>
         }
@@ -48,10 +48,6 @@
 <div class="pull-right">
     <input type="button" value="Add table" onclick="AddTable()" />
 </div>
-
-@*<div class="pull-right">
-    <input type="button" value="Save changes" onclick="ReturnToHome(@Model.Name, @Model.Tables)" />
-</div>*@
 
 <div id="myModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">

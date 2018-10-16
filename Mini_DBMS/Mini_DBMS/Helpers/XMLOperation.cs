@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Mini_DBMS.Helpers
@@ -13,9 +15,20 @@ namespace Mini_DBMS.Helpers
         public List<Database> ReadFromFile()
         {
             List<Database> databases = new List<Database>();
-            databases.Add(new Database { Name = "database1", Tables = new List<Table> { new Table { Name = "table1", Fields = new List<Field> { new Field { Name = "field1" } } } } });
-            databases.Add(new Database { Name = "database2", Tables = new List<Table>() { new Table { Name = "table2", Fields = new List<Field> { new Field { Name = "field2" } } } } });
-            databases.Add(new Database { Name = "database3", Tables = new List<Table>() { new Table { Name = "table3", Fields = new List<Field> { new Field { Name = "field3" } } } } });
+
+            var serializer = new XmlSerializer(typeof(List<Database>));
+
+            var currentDirectory = Environment.CurrentDirectory;
+            //var stringulet = Environment.GetFolderPath(Environment.CurrentDirectory);
+            string folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
+
+            using (var stream = new FileStream(folderPath, FileMode.Open))
+            {
+                using(var reader = XmlReader.Create(stream))
+                {
+                    databases = (List<Database>)serializer.Deserialize(reader);
+                }
+            }
 
             return databases;
         }

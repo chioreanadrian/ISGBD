@@ -16,17 +16,10 @@ namespace Mini_DBMS.Controllers
         private static List<Database> databases;
         private static XMLOperation XMLOperationHelper;
 
-        public HomeController()
+        public ActionResult Index()
         {
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
-            XMLOperationHelper.WriteToFile(databases);
-
-            //folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//DBMS.xml";
-        }
-
-        public ActionResult Index()
-        {
             //var xmlStr = System.IO.File.ReadAllText(folderPath);
             //var str = XElement.Parse(xmlStr);
 
@@ -42,6 +35,8 @@ namespace Mini_DBMS.Controllers
         { 
             //SaveDBToXML(database);
             currentDatabase = database;
+            currentDatabase.Tables = new List<Table>();
+
             return View("Tables", currentDatabase);
         }
 
@@ -51,6 +46,7 @@ namespace Mini_DBMS.Controllers
         public ActionResult CreateTable(Table table)
         {
             currentTable = table;
+            currentTable.Fields = new List<Field>();
             //SaveTableToXML(table, currentDatabase);
 
             return View("Fields", currentTable);
@@ -69,14 +65,14 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult GoToTables()
         {
-
-            return View("Tables");
+            currentDatabase.Tables.Add(currentTable);
+            return View("Tables", currentDatabase);
         }
 
         [HttpGet]
         public ActionResult GoToDatabases()
         {
-            return View("Index");
+            return View("Index", databases);
         }
 
         //public void SaveDBToXML(Database db)
@@ -98,5 +94,29 @@ namespace Mini_DBMS.Controllers
 
         //    database?.Element("tables").Add();
         //}
+
+        public ActionResult DeleteDatabase(string databaseName)
+        {
+            Database databaseToDelete = databases.FirstOrDefault(x => x.Name == databaseName);
+
+            if (databaseToDelete != null)
+            {
+                databases.Remove(databaseToDelete);
+            }
+
+            return View("Index", databases);
+        }
+
+        public ActionResult DeleteTable(string tableName)
+        {
+            Table tableToDelete = currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
+
+            if(tableToDelete != null)
+            {
+                currentDatabase.Tables.Remove(tableToDelete);
+            }
+
+            return View("Tables", currentDatabase);
+        }
     }
 }
