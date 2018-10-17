@@ -16,7 +16,6 @@ namespace Mini_DBMS.Helpers
 
             var serializer = new XmlSerializer(typeof(List<Database>));
 
-            var currentDirectory = Environment.CurrentDirectory; // cu asta ce e aici?
             string folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
 
             using (var stream = new FileStream(folderPath, FileMode.Open))
@@ -34,7 +33,6 @@ namespace Mini_DBMS.Helpers
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Database>));
 
-            //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//DBMS_test.xml";
             string folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
             TextWriter fileStream = new StreamWriter(folderPath);
             serializer.Serialize(fileStream, databases);
