@@ -12,11 +12,11 @@ namespace Mini_DBMS.Helpers
     {
         public List<Database> ReadFromFile()
         {
-            List<Database> databases = new List<Database>();
+            var databases = new List<Database>();
 
             var serializer = new XmlSerializer(typeof(List<Database>));
 
-            string folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
+            var folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
 
             using (var stream = new FileStream(folderPath, FileMode.Open))
             {
