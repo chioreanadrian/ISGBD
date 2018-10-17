@@ -13,6 +13,9 @@
         <AllowNull>false</AllowNull>
       </Attributes>
     </Tables>
+    <Tables>
+      <TableName>table2</TableName>
+    </Tables>
   </Databases>
   <Databases>
     <DatabaseName>database2</DatabaseName>
@@ -26,6 +29,67 @@
         <IsForeignKey>false</IsForeignKey>
         <AllowNull>false</AllowNull>
       </Attributes>
+    </Tables>
+  </Databases>
+  <Databases>
+    <DatabaseName>database5</DatabaseName>
+    <Tables>
+      <TableName>table1</TableName>
+    </Tables>
+  </Databases>
+  <Databases>
+    <DatabaseName>database3</DatabaseName>
+    <Tables>
+      <TableName>table1</TableName>
+      <Attributes>
+        <Name>id</Name>
+        <Type>number</Type>
+        <Length>10</Length>
+        <IsPrimaryKey>true</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </Attributes>
+      <Attributes>
+        <Name>name</Name>
+        <Type>varchar</Type>
+        <Length>50</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>true</AllowNull>
+      </Attributes>
+      <Attributes>
+        <Name>birthDate</Name>
+        <Type>datetime</Type>
+        <Length>10</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>true</AllowNull>
+      </Attributes>
+    </Tables>
+  </Databases>
+  <Databases>
+    <DatabaseName>database34</DatabaseName>
+  </Databases>
+  <Databases>
+    <DatabaseName>newdatabase</DatabaseName>
+    <Tables>
+      <TableName>table1</TableName>
+      <Attributes>
+        <Name>id</Name>
+        <Type>number</Type>
+        <Length>0</Length>
+        <IsPrimaryKey>true</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </Attributes>
+      <IndexAttribute>
+        <Name>id</Name>
+        <Type>varchar</Type>
+        <Length>0</Length>
+        <IsPrimaryKey>false</IsPrimaryKey>
+        <IsForeignKey>false</IsForeignKey>
+        <AllowNull>false</AllowNull>
+      </IndexAttribute>
     </Tables>
   </Databases>
 </ArrayOfDatabases>

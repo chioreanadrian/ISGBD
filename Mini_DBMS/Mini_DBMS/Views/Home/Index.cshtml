@@ -15,6 +15,7 @@
                 <th>Name</th>
                 <th>No of tables</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,9 @@
                 <td>@database.Tables.Count</td>
                 <td>
                     <input type="button" value="Delete" onclick="location.href='@Url.Action("DeleteDatabase", "Home", new { databaseName = database.Name })'" />
+                </td>
+                <td>
+                    <input type="button" value="View database" onclick="location.href='@Url.Action("ViewDatabase", "Home", new { databaseName = database.Name })'" />
                 </td>
             </tr>
             }

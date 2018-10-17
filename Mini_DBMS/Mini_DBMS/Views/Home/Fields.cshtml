@@ -6,6 +6,7 @@
 @model Mini_DBMS.Models.Table
 
 <script src="~/Scripts/customs/addAll.js"></script>
+<script src="~/Scripts/customs/addindex.js"></script>
 
 <div class="pull-left">
     @Html.ActionLink("Go back", "GoToTables", "Home")
@@ -58,15 +59,22 @@
                 <td>
                     <input type="checkbox" checked="@field.AllowNull" disabled="disabled" />
                 </td>
-                
+
             </tr>
         }
-        </tbody>
+    </tbody>
 </table>
 
 <div class="pull-right">
     <input type="button" value="Add field" onclick="AddFields()" />
 </div>
+@if (Model.Fields.Count != 0)
+{
+<div class="pull-right">
+    <input type="button" value="Add index" onclick="AddIndex()" />
+</div>
+}
+
 
 <div id="myModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
