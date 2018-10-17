@@ -20,13 +20,13 @@
         <tbody>
             @foreach (var database in @Model)
             {
-                <tr>
-                    <td>@database.Name</td>
-                    <td>@database.Tables.Count</td>
-                    <td>
-                        <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteDatabase", "Home", new { databaseName = database.Name })'"/>
-                    </td>
-                </tr>
+            <tr>
+                <td>@database.Name</td>
+                <td>@database.Tables.Count</td>
+                <td>
+                    <input type="button" value="Delete" onclick="location.href='@Url.Action("DeleteDatabase", "Home", new { databaseName = database.Name })'" />
+                </td>
+            </tr>
             }
         </tbody>
     </table>
