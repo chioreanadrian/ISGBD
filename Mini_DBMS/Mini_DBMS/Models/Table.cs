@@ -11,5 +11,8 @@ namespace Mini_DBMS.Models
 
         [XmlElement("Attributes")]
         public List<Field> Fields { get; set; }
+
+        [XmlElement("IndexAttribute")]
+        public Field Index { get; set; }
     }
 }

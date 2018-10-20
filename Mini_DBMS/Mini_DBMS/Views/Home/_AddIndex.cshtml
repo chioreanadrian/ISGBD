@@ -1,0 +1,38 @@
+﻿
+@model Mini_DBMS.Models.Table
+
+@using (Ajax.BeginForm("AddIndex", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "CreateIndexModal"
+}))
+{
+
+    <fieldset>
+        <h3>Add index</h3>
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Index name</label>
+            @Html.TextBoxFor(m => m.Index.Name, new { id = "index", @class = "form-control", placeholder = "Index name" })
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Name))
+        {
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Add<div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+        }
+    </fieldset>
+}
+
+
+

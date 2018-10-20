@@ -75,6 +75,8 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult GoToDatabases()
         {
+            XMLOperationHelper.WriteToFile(databases);
+
             return View("Index", databases);
         }
 
@@ -102,6 +104,32 @@ namespace Mini_DBMS.Controllers
             }
 
             return View("Tables", currentDatabase);
+        }
+
+        [HttpGet]
+        public ActionResult AddIndex()
+        {
+            currentTable.Index = new Field();
+            return PartialView("_AddIndex", currentTable);
+        }
+
+        public ActionResult AddIndex(Table table)
+        {
+            currentTable.Index = table.Index;
+            return View("Fields", currentTable);
+        }
+
+        public ActionResult ViewDatabase(string databaseName)
+        {
+            var database = databases.FirstOrDefault(x => x.Name == databaseName);
+
+            if(database != null)
+            {
+                currentDatabase = database;
+                return View("Tables", currentDatabase);
+            }
+
+            return null;
         }
     }
 }

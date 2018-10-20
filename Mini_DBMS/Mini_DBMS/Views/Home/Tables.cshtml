@@ -23,6 +23,9 @@
                 No of fields
             </th>
             <th>
+                Index column
+            </th>
+            <th>
 
             </th>
         </tr>
@@ -36,6 +39,12 @@
             </td>
             <td>
                 @table.Fields.Count
+            </td>
+            <td>
+                @if (table.Index != null)
+                {
+                @table.Index.Name
+                }
             </td>
             <td>
                 <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteTable", "Home", new { tableName = table.Name })'" />
