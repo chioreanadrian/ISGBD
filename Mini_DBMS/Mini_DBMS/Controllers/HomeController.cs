@@ -25,7 +25,7 @@ namespace Mini_DBMS.Controllers
         public ActionResult CreateDatabase() => PartialView("_CreateDatabase", new Database());
 
         public ActionResult CreateDatabase(Database database)
-        { 
+        {
             currentDatabase = database;
             currentDatabase.Tables = new List<Table>();
 
@@ -42,15 +42,12 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateTable(Table table)
         {
+            foreach (var t in currentDatabase.Tables)
+                if (t.Name == table.Name)
+                    return View("Tables", currentDatabase);
+
             currentTable = table;
             currentTable.Fields = new List<Field>();
-
-            //if (databases.FirstOrDefault(d => d.Name == databaseName).Tables.Select(t => t.Name).ToList().Contains(table.Name))
-            //    return View("Index", databases);
-
-            //databases.FirstOrDefault(d => d.Name == databaseName)?.Tables.Add(table);
-
-            //XMLOperationHelper.WriteToFile(databases);
 
             return View("Fields", currentTable);
         }
@@ -60,6 +57,10 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateField(Field field)
         {
+            foreach (var f in currentTable.Fields)
+                if (f.Name == field.Name)
+                    return View("Fields", currentTable);
+
             currentTable.Fields.Add(field);
 
             return View("Fields", currentTable);
@@ -98,7 +99,7 @@ namespace Mini_DBMS.Controllers
         {
             Table tableToDelete = currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
 
-            if(tableToDelete != null)
+            if (tableToDelete != null)
             {
                 currentDatabase.Tables.Remove(tableToDelete);
             }
@@ -123,12 +124,23 @@ namespace Mini_DBMS.Controllers
         {
             var database = databases.FirstOrDefault(x => x.Name == databaseName);
 
-            if(database != null)
+            if (database != null)
             {
                 currentDatabase = database;
                 return View("Tables", currentDatabase);
             }
 
+            return null;
+        }
+        public ActionResult ViewFields(string tableName)
+        {
+            var table = currentDatabase.Tables.FirstOrDefault(t => t.Name == tableName);
+            
+            if(table != null)
+            {
+                currentTable = table;
+                return View("Fields", currentTable);
+            }
             return null;
         }
     }
