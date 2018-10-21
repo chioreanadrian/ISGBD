@@ -3,6 +3,12 @@
   <Databases>
     <DatabaseName>database1</DatabaseName>
     <Tables>
+      <TableName>table2</TableName>
+    </Tables>
+    <Tables>
+      <TableName>table3</TableName>
+    </Tables>
+    <Tables>
       <TableName>table1</TableName>
       <Attributes>
         <Name>field1</Name>
@@ -12,9 +18,6 @@
         <IsForeignKey>false</IsForeignKey>
         <AllowNull>false</AllowNull>
       </Attributes>
-    </Tables>
-    <Tables>
-      <TableName>table2</TableName>
     </Tables>
   </Databases>
   <Databases>

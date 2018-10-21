@@ -42,13 +42,17 @@
             </td>
             <td>
                 @if (table.Index != null)
-                {
-                @table.Index.Name
-                }
+        {
+            @table.Index.Name
+}
+            </td>
+            <td>
+                <input type="button" value="View fields" onclick="location.href='@Url.Action("ViewFields", "Home", new { tableName = table.Name })'" />
             </td>
             <td>
                 <input type="button" value="Drop" onclick="location.href='@Url.Action("DeleteTable", "Home", new { tableName = table.Name })'" />
             </td>
+
         </tr>
         }
     </tbody>
