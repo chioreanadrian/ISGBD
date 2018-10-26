@@ -14,5 +14,11 @@ namespace Mini_DBMS.Models
 
         [XmlElement("IndexAttribute")]
         public Field Index { get; set; }
+
+        [XmlElement("PrimaryKey")]
+        public Field PrimaryKey { get; set; }
+
+        [XmlElement("ForeignKey")]
+        public FK ForeignKey { get; set; }
     }
 }

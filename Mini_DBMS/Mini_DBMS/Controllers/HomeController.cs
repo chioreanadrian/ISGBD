@@ -62,6 +62,14 @@ namespace Mini_DBMS.Controllers
                     return View("Fields", currentTable);
 
             currentTable.Fields.Add(field);
+            if (field.IsPrimaryKey && !field.IsForeignKey)
+                currentTable.PrimaryKey = field;
+            if (field.IsForeignKey && !field.IsPrimaryKey)
+                currentTable.ForeignKey = new FK
+                {
+                    Field = field,
+                    OriginTable = new Table()
+                };
 
             return View("Fields", currentTable);
         }
