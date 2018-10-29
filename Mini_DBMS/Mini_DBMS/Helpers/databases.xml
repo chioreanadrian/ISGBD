@@ -1,87 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfDatabases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Databases>
-    <DatabaseName>newdatabase</DatabaseName>
+<ArrayOfDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Database databaseName="database1">
     <Tables>
-      <TableName>table1</TableName>
-      <Attributes>
-        <Name>id</Name>
-        <Type>number</Type>
-        <Length>0</Length>
-        <IsPrimaryKey>true</IsPrimaryKey>
-        <IsForeignKey>false</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <IndexAttribute>
-        <Name>id</Name>
-        <Type>varchar</Type>
-        <Length>0</Length>
-        <IsPrimaryKey>false</IsPrimaryKey>
-        <IsForeignKey>false</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </IndexAttribute>
+      <Table tableName="table1">
+        <Attributes>
+          <Attribute attributeName="id" type="number" length="100" isnull="false" />
+          <Attribute attributeName="firsstname" type="varchar" length="50" isnull="true" />
+        </Attributes>
+      </Table>
+      <Table tableName="table2">
+        <Attributes />
+      </Table>
     </Tables>
+  </Database>
+  <Database databaseName="database2">
     <Tables>
-      <TableName>table2</TableName>
-      <Attributes>
-        <Name>Id</Name>
-        <Type>varchar</Type>
-        <Length>100</Length>
-        <IsPrimaryKey>false</IsPrimaryKey>
-        <IsForeignKey>false</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <Attributes>
-        <Name>Pisici</Name>
-        <Type>varchar</Type>
-        <Length>50</Length>
-        <IsPrimaryKey>true</IsPrimaryKey>
-        <IsForeignKey>false</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <Attributes>
-        <Name>Marime</Name>
-        <Type>number</Type>
-        <Length>10</Length>
-        <IsPrimaryKey>false</IsPrimaryKey>
-        <IsForeignKey>true</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <Attributes>
-        <Name>Field1</Name>
-        <Type>datetime</Type>
-        <Length>0</Length>
-        <IsPrimaryKey>false</IsPrimaryKey>
-        <IsForeignKey>true</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <Attributes>
-        <Name>asdf</Name>
-        <Type>varchar</Type>
-        <Length>10</Length>
-        <IsPrimaryKey>false</IsPrimaryKey>
-        <IsForeignKey>true</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </Attributes>
-      <PrimaryKey>
-        <Name>Pisici</Name>
-        <Type>varchar</Type>
-        <Length>50</Length>
-        <IsPrimaryKey>true</IsPrimaryKey>
-        <IsForeignKey>false</IsForeignKey>
-        <AllowNull>false</AllowNull>
-      </PrimaryKey>
-      <ForeignKey>
-        <Field>
-          <Name>asdf</Name>
-          <Type>varchar</Type>
-          <Length>10</Length>
-          <IsPrimaryKey>false</IsPrimaryKey>
-          <IsForeignKey>true</IsForeignKey>
-          <AllowNull>false</AllowNull>
-        </Field>
-        <OriginTable />
-      </ForeignKey>
+      <Table tableName="table2" fileName="table2.kv">
+        <Attributes>
+          <Attribute attributeName="id" type="number" length="0" isnull="false" />
+        </Attributes>
+        <IndexAttribute>id</IndexAttribute>
+        <PrimaryKey>id</PrimaryKey>
+      </Table>
+      <Table tableName="table2" fileName="table2.kv">
+        <Attributes>
+          <Attribute attributeName="id" type="number" length="0" isnull="false" />
+        </Attributes>
+        <PrimaryKey>id</PrimaryKey>
+      </Table>
+      <Table tableName="table2" fileName="table2.kv">
+        <Attributes>
+          <Attribute attributeName="id" type="number" length="0" isnull="false" />
+        </Attributes>
+        <IndexAttribute>id</IndexAttribute>
+        <PrimaryKey>id</PrimaryKey>
+      </Table>
     </Tables>
-  </Databases>
-</ArrayOfDatabases>
+  </Database>
+</ArrayOfDatabase>

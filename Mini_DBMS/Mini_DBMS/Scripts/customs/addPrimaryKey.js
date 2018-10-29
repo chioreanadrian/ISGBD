@@ -1,7 +1,7 @@
-﻿function AddIndex() {
+﻿function AddPrimaryKey() {
     $body = $("body");
     $.ajax({
-        url: '/Home/AddIndex',
+        url: '/Home/AddPrimaryKey',
         type: 'GET',
         data: {},
         success: function (result) {
@@ -13,4 +13,3 @@
         }
     }, this);
 }
-

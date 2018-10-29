@@ -17,7 +17,7 @@ namespace Mini_DBMS.Controllers
         {
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
-
+            //databases = new List<Database>();
             return View(databases);
         }
 
@@ -46,7 +46,9 @@ namespace Mini_DBMS.Controllers
                 if (t.Name == table.Name)
                     return View("Tables", currentDatabase);
 
+            table.FileName = string.Format("{0}.kv", table.Name.ToLower());
             currentTable = table;
+            
             currentTable.Fields = new List<Field>();
 
             return View("Fields", currentTable);
@@ -62,14 +64,14 @@ namespace Mini_DBMS.Controllers
                     return View("Fields", currentTable);
 
             currentTable.Fields.Add(field);
-            if (field.IsPrimaryKey && !field.IsForeignKey)
-                currentTable.PrimaryKey = field;
-            if (field.IsForeignKey && !field.IsPrimaryKey)
-                currentTable.ForeignKey = new FK
-                {
-                    Field = field,
-                    OriginTable = new Table()
-                };
+            //if (field.IsPrimaryKey && !field.IsForeignKey)
+            //    currentTable.PrimaryKey = field;
+            //if (field.IsForeignKey && !field.IsPrimaryKey)
+            //    currentTable.ForeignKey = new FK
+            //    {
+            //        Field = field,
+            //        OriginTable = new Table()
+            //    };
 
             return View("Fields", currentTable);
         }
@@ -118,7 +120,6 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult AddIndex()
         {
-            currentTable.Index = new Field();
             return PartialView("_AddIndex", currentTable);
         }
 
@@ -151,5 +152,37 @@ namespace Mini_DBMS.Controllers
             }
             return null;
         }
+
+        [HttpGet]
+        public ActionResult AddPrimaryKey()
+        {
+            return PartialView("_AddPrimaryKey", currentTable);
+        }
+
+        public ActionResult AddPrimaryKey(Table table)
+        {
+
+            currentTable.PrimaryKey = table.PrimaryKey;
+            return View("Fields", currentTable);
+        }
+
+        [HttpGet]
+        public ActionResult AddForeignKey(string field)
+        {
+            AddForeignKeyModel model = new AddForeignKeyModel
+            {
+                Field = field,
+                Database = currentDatabase
+            };
+
+            return PartialView("_AddForeignKey", model);
+        }
+
+        public ActionResult AddForeignKey(AddForeignKeyModel model)
+        {
+
+            return View("Fields", currentTable);
+        }
+        
     }
 }

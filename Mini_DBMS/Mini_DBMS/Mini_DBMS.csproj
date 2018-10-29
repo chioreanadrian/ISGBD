@@ -153,10 +153,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\XMLOperation.cs" />
+    <Compile Include="Models\AddForeignKeyModel.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldType.cs" />
-    <Compile Include="Models\FK.cs" />
+    <Compile Include="Models\ForeignKey.cs" />
     <Compile Include="Models\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -169,8 +170,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\customs\addForeignKey.js" />
     <Content Include="Scripts\customs\addindex.js" />
+    <Content Include="Scripts\customs\addPrimaryKey.js" />
     <Content Include="Views\Home\_AddIndex.cshtml" />
+    <Content Include="Views\Home\ViewData.cshtml" />
+    <Content Include="Views\Home\_AddPrimaryKey.cshtml" />
+    <Content Include="Views\Home\_AddForeignKey.cshtml" />
     <Resource Include="Helpers\databases.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

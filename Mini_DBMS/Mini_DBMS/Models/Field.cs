@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Mini_DBMS.Models
 {
-    [XmlType("Attributes")]
+    [XmlType("Attribute")]
     public class Field
     {
-        [XmlElement("Name")]
+        [XmlAttribute("attributeName")]
         public string Name { get; set; }
 
-        [XmlElement("Type")]
+        [XmlAttribute("type")]
         public FieldType Type { get; set; }
 
-        [XmlElement("Length")]
+        [XmlAttribute("length")]
         public int Length { get; set; }
 
-        public bool IsPrimaryKey { get; set; }
-        public bool IsForeignKey { get; set; }
+        [XmlAttribute("isnull")]
         public bool AllowNull { get; set; }
     }
 }

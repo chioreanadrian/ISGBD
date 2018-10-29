@@ -41,10 +41,13 @@
                 @table.Fields.Count
             </td>
             <td>
-                @if (table.Index != null)
-        {
-            @table.Index.Name
-}
+                @*@if (table.Index != null)
+                {
+                    @table.Index.Name
+                }*@
+            </td>
+            <td>
+                <input type="button" value="View data" onclick="location.href='@Url.Action("ViewData", "Home")'" />
             </td>
             <td>
                 <input type="button" value="View fields" onclick="location.href='@Url.Action("ViewFields", "Home", new { tableName = table.Name })'" />

@@ -7,6 +7,8 @@
 
 <script src="~/Scripts/customs/addAll.js"></script>
 <script src="~/Scripts/customs/addindex.js"></script>
+<script src="~/Scripts/customs/addPrimaryKey.js"></script>
+<script src="~/Scripts/customs/addForeignKey.js"></script>
 
 <div class="pull-left">
     @Html.ActionLink("Go back", "GoToTables", "Home")
@@ -24,12 +26,6 @@
                 Type
             </th>
             <th>Length</th>
-            <th>
-                Is primary key
-            </th>
-            <th>
-                Is foreign key
-            </th>
             <th>
                 Allow nulls
             </th>
@@ -51,15 +47,14 @@
                     @field.Length
                 </td>
                 <td>
-                    <input type="checkbox" checked="@field.IsPrimaryKey" disabled="disabled" />
-                </td>
-                <td>
-                    <input type="checkbox" checked="@field.IsForeignKey" disabled="disabled" />
-                </td>
-                <td>
                     <input type="checkbox" checked="@field.AllowNull" disabled="disabled" />
                 </td>
-
+                @if (@Model.Fields.Count != 0)
+                {
+                    <td>
+                        <input type="button" value="Set as foreign key" onclick="AddForeignKey(@field.Name)"/>
+                    </td>
+                }
             </tr>
         }
     </tbody>
@@ -70,11 +65,16 @@
 </div>
 @if (Model.Fields.Count != 0)
 {
-<div class="pull-right">
-    <input type="button" value="Add index" onclick="AddIndex()" />
-</div>
+    <div class="pull-right">
+        <input type="button" value="Add index" onclick="AddIndex()" />
+    </div>
 }
-
+@if (@Model.Fields.Count != 0)
+{
+    <div class="pull-right">
+        <input type="button" value="Add primary key" onclick="AddPrimaryKey()" />
+    </div>
+}
 
 <div id="myModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
