@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="libdb_dotnet61, Version=6.1.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Berkeley.DB.6.1.26\lib\net40\libdb_dotnet61.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -170,6 +173,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="libdb61.dll" />
+    <Content Include="libdb_csharp61.dll" />
     <Content Include="Scripts\customs\addForeignKey.js" />
     <Content Include="Scripts\customs\addindex.js" />
     <Content Include="Scripts\customs\addPrimaryKey.js" />
