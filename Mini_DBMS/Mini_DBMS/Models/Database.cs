@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Mini_DBMS.Models
 {
-    [XmlType("Databases")]
+    [XmlType("Database")]
     public class Database
     {
-        [XmlElement("DatabaseName")]
+        [XmlAttribute("databaseName")]
         public string Name { get; set; }
 
-        [XmlElement("Tables")]
+        [XmlArray("Tables")]
         public List<Table> Tables { get; set; }
     }
 }

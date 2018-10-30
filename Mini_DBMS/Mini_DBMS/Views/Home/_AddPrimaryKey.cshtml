@@ -9,7 +9,7 @@
     });
 }
 
-@using (Ajax.BeginForm("AddIndex", "Home", new AjaxOptions
+@using (Ajax.BeginForm("AddPrimaryKey", "Home", new AjaxOptions
 {
     InsertionMode = InsertionMode.Replace,
     HttpMethod = "POST",
@@ -19,27 +19,26 @@
 {
     @class = "form-card vertical-center",
     role = "form",
-    id = "CreateIndexModal"
+    id = "AddPrimaryKeyModal"
 }))
 {
 
     <fieldset>
-        <h3>Add index</h3>
+        <h3>Add primary key</h3>
 
         <div class="form-group label-static is-empty">
             <label class="control-label">Index name</label>
-            @Html.DropDownListFor(model => model.Index, fieldsItems, new { @class = "form-control" })
-
+            @Html.DropDownListFor(model => model.PrimaryKey, fieldsItems, new { @class = "form-control" })
         </div>
 
-        <div class="page-footer">
-            <div class="pull-right">
-                <button type="submit" class="btn btn-primary">Add<div clifs="ripple-container"></div></button>
+            <div class="page-footer">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-primary">Add<div clifs="ripple-container"></div></button>
+                </div>
             </div>
-        </div>
-        
     </fieldset>
 }
+
 
 
 

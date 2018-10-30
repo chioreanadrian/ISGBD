@@ -1,16 +1,13 @@
-﻿function AddIndex() {
+﻿function AddForeignKey(field) {
     $body = $("body");
     $.ajax({
-        url: '/Home/AddIndex',
+        url: '/Home/AddForeignKey',
         type: 'GET',
-        data: {},
+        data: { field: field },
         success: function (result) {
             $('#myModal .modal-body').html(result);
 
-
-            //$.material.init();
             $('#myModal').modal('show');
         }
     }, this);
 }
-

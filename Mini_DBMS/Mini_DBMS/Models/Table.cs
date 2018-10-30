@@ -3,22 +3,25 @@ using System.Xml.Serialization;
 
 namespace Mini_DBMS.Models
 {
-    [XmlType("Tables")]
+    [XmlType("Table")]
     public class Table
-    {
-        [XmlElement("TableName")]
+    {        
+        [XmlAttribute("tableName")]
         public string Name { get; set; }
 
-        [XmlElement("Attributes")]
+        [XmlAttribute("fileName")]
+        public string FileName { get; set; }
+
+        [XmlArray("Attributes")]
         public List<Field> Fields { get; set; }
 
-        [XmlElement("IndexAttribute")]
-        public Field Index { get; set; }
-
         [XmlElement("PrimaryKey")]
-        public Field PrimaryKey { get; set; }
+        public string PrimaryKey { get; set; }
 
-        [XmlElement("ForeignKey")]
-        public FK ForeignKey { get; set; }
+        [XmlArray("ForeignKeys")]
+        public List<ForeignKey> ForeignKeys { get; set; }
+
+        [XmlElement("IndexAttribute")]
+        public string Index { get; set; }
     }
 }

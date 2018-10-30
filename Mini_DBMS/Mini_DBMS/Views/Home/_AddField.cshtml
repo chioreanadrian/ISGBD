@@ -34,15 +34,15 @@
             @Html.TextBoxFor(m => m.Length, new { id = "length", @class = "form-control", placeholder = "Field length" })
         </div>
 
-        <div class="form-group label-static is-empty">
-            <label class="control-label">Primary key</label>
-            @Html.CheckBoxFor(x => x.IsPrimaryKey)
-        </div>
+        @*<div class="form-group label-static is-empty">
+                <label class="control-label">Primary key</label>
+                @Html.CheckBoxFor(x => x.IsPrimaryKey)
+            </div>
 
-        <div class="form-group label-static is-empty">
-            <label class="control-label">Foreign key</label>
-            @Html.CheckBoxFor(x => x.IsForeignKey)
-        </div>
+            <div class="form-group label-static is-empty">
+                <label class="control-label">Foreign key</label>
+                @Html.CheckBoxFor(x => x.IsForeignKey)
+            </div>*@
 
         <div class="form-group label-static is-empty">
             <label class="control-label">Allow null</label>
