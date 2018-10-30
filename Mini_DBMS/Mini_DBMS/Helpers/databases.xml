@@ -7,33 +7,16 @@
           <Attribute attributeName="id" type="number" length="100" isnull="false" />
           <Attribute attributeName="firsstname" type="varchar" length="50" isnull="true" />
         </Attributes>
-      </Table>
-      <Table tableName="table2">
-        <Attributes />
-      </Table>
-    </Tables>
-  </Database>
-  <Database databaseName="database2">
-    <Tables>
-      <Table tableName="table2" fileName="table2.kv">
-        <Attributes>
-          <Attribute attributeName="id" type="number" length="0" isnull="false" />
-        </Attributes>
-        <IndexAttribute>id</IndexAttribute>
-        <PrimaryKey>id</PrimaryKey>
+        <ForeignKeys />
       </Table>
       <Table tableName="table2" fileName="table2.kv">
         <Attributes>
-          <Attribute attributeName="id" type="number" length="0" isnull="false" />
+          <Attribute attributeName="id" type="number" length="23" isnull="false" />
+          <Attribute attributeName="idFromTable2" type="number" length="23" isnull="false" />
         </Attributes>
-        <PrimaryKey>id</PrimaryKey>
-      </Table>
-      <Table tableName="table2" fileName="table2.kv">
-        <Attributes>
-          <Attribute attributeName="id" type="number" length="0" isnull="false" />
-        </Attributes>
-        <IndexAttribute>id</IndexAttribute>
-        <PrimaryKey>id</PrimaryKey>
+        <ForeignKeys>
+          <ForeignKey parentField="idFromTable2" refAttribute="id" parentTable="table1" />
+        </ForeignKeys>
       </Table>
     </Tables>
   </Database>

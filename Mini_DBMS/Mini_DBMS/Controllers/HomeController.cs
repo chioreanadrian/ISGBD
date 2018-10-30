@@ -17,7 +17,6 @@ namespace Mini_DBMS.Controllers
         {
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
-            //databases = new List<Database>();
             return View(databases);
         }
 
@@ -48,7 +47,7 @@ namespace Mini_DBMS.Controllers
 
             table.FileName = string.Format("{0}.kv", table.Name.ToLower());
             currentTable = table;
-            
+
             currentTable.Fields = new List<Field>();
 
             return View("Fields", currentTable);
@@ -64,14 +63,6 @@ namespace Mini_DBMS.Controllers
                     return View("Fields", currentTable);
 
             currentTable.Fields.Add(field);
-            //if (field.IsPrimaryKey && !field.IsForeignKey)
-            //    currentTable.PrimaryKey = field;
-            //if (field.IsForeignKey && !field.IsPrimaryKey)
-            //    currentTable.ForeignKey = new FK
-            //    {
-            //        Field = field,
-            //        OriginTable = new Table()
-            //    };
 
             return View("Fields", currentTable);
         }
@@ -79,7 +70,11 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult GoToTables()
         {
-            currentDatabase.Tables.Add(currentTable);
+            if (!currentDatabase.Tables.Select(x => x.Name).Contains(currentTable.Name))
+            {
+                currentDatabase.Tables.Add(currentTable);
+            }
+
             return View("Tables", currentDatabase);
         }
 
@@ -144,8 +139,8 @@ namespace Mini_DBMS.Controllers
         public ActionResult ViewFields(string tableName)
         {
             var table = currentDatabase.Tables.FirstOrDefault(t => t.Name == tableName);
-            
-            if(table != null)
+
+            if (table != null)
             {
                 currentTable = table;
                 return View("Fields", currentTable);
@@ -161,7 +156,6 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult AddPrimaryKey(Table table)
         {
-
             currentTable.PrimaryKey = table.PrimaryKey;
             return View("Fields", currentTable);
         }
@@ -169,10 +163,15 @@ namespace Mini_DBMS.Controllers
         [HttpGet]
         public ActionResult AddForeignKey(string field)
         {
+            var databaseForModel = new Database();
+            databaseForModel.Tables = new List<Table>();
+            databaseForModel.Tables.AddRange(currentDatabase.Tables);
+            databaseForModel.Tables.Remove(currentTable);
+
             AddForeignKeyModel model = new AddForeignKeyModel
             {
                 Field = field,
-                Database = currentDatabase
+                Database = databaseForModel
             };
 
             return PartialView("_AddForeignKey", model);
@@ -180,9 +179,28 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult AddForeignKey(AddForeignKeyModel model)
         {
+            var table = currentDatabase.Tables.FirstOrDefault(x => x.Name == model.ReferencedTable);
+            if (table != null)
+            {
+                if (table.Fields.Select(x => x.Name).Contains(model.ReferencedProperty))
+                {
+                    if (currentTable.ForeignKeys == null)
+                    {
+                        currentTable.ForeignKeys = new List<ForeignKey>();
+                    }
+
+                    currentTable.ForeignKeys.Add(new ForeignKey
+                    {
+                        ParentField = model.Field,
+                        Field = model.ReferencedProperty,
+                        OriginTable = model.ReferencedTable
+                    });
+                }
+            }
 
             return View("Fields", currentTable);
+
         }
-        
+
     }
 }
