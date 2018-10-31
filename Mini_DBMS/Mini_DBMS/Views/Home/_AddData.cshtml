@@ -1,0 +1,48 @@
+﻿@using Mini_DBMS.Models
+
+@model Mini_DBMS.Models.SimpleQuery
+@{
+    ViewBag.Title = "_AddData";
+}
+
+<h2>Query</h2>
+
+
+@using (Ajax.BeginForm("CreateQuery", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "CreateQueryModal"
+}))
+{
+    <body>
+    <fieldset>
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Field type</label>
+            @Html.DropDownListFor(m => m.Type, new SelectList(Enum.GetValues(typeof(QueryType))), "Select type", new { @class = "form-control" })
+        </div>
+        <div class="form-group label-static is-empty">
+            <label>Into</label>
+            @Html.TextBoxFor(m => m.From, new {id = "name", @class = "form-control", placeholder = "table"})
+        </div>
+        <div class="form-group label-static is-empty">
+            <label>Values</label>
+            @Html.TextBoxFor(m => m.Values, new {id = "name", @class = "form-control", placeholder = "condition"})
+        </div>
+
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Execute query
+                    <div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+    </fieldset>
+    </body>
+
+}

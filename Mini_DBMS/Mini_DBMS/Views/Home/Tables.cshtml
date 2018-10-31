@@ -42,12 +42,15 @@
             </td>
             <td>
                 @*@if (table.Index != null)
-                {
-                    @table.Index.Name
-                }*@
+            {
+                @table.Index.Name
+            }*@
             </td>
             <td>
-                <input type="button" value="View data" onclick="location.href='@Url.Action("ViewData", "Home")'" />
+                <input type="button" value="Query table" onclick="location.href='@Url.Action("_AddData", "Home", new {tableName = table.Name})'" />
+            </td>
+            <td>
+                <input type="button" value="View data" onclick="location.href='@Url.Action("ViewData", "Home", new {tableName = table.Name})'" />
             </td>
             <td>
                 <input type="button" value="View fields" onclick="location.href='@Url.Action("ViewFields", "Home", new { tableName = table.Name })'" />

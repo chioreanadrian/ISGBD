@@ -7,7 +7,9 @@
           <Attribute attributeName="id" type="number" length="100" isnull="false" />
           <Attribute attributeName="firsstname" type="varchar" length="50" isnull="true" />
         </Attributes>
-        <ForeignKeys />
+        <ForeignKeys>
+          <ForeignKey parentField="firsstname" refAttribute="idFromTable2" parentTable="table2" />
+        </ForeignKeys>
       </Table>
       <Table tableName="table2" fileName="table2.kv">
         <Attributes>
@@ -16,6 +18,7 @@
         </Attributes>
         <ForeignKeys>
           <ForeignKey parentField="idFromTable2" refAttribute="id" parentTable="table1" />
+          <ForeignKey parentField="id" refAttribute="firsstname" parentTable="table1" />
         </ForeignKeys>
       </Table>
     </Tables>

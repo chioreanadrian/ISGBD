@@ -1,8 +1,15 @@
-﻿using Mini_DBMS.Helpers;
+﻿using System;
+using Mini_DBMS.Helpers;
 using Mini_DBMS.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
+using System.Xml;
+using System.Xml.Serialization;
+using DBreeze;
 
 namespace Mini_DBMS.Controllers
 {
@@ -12,11 +19,13 @@ namespace Mini_DBMS.Controllers
         private static Table currentTable;
         private static List<Database> databases;
         private static XMLOperation XMLOperationHelper;
+        private static DBreezeEngine dBreeze;
 
         public ActionResult Index()
         {
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
+            dBreeze = new DBreezeEngine("~/Helpers/dbreeze");
             return View(databases);
         }
 
@@ -145,6 +154,53 @@ namespace Mini_DBMS.Controllers
                 currentTable = table;
                 return View("Fields", currentTable);
             }
+            return null;
+        }
+
+        public ActionResult ViewData(string tableName)
+        {
+            return View();
+        }
+
+        public ActionResult _AddData(SimpleQuery query)
+        {
+            return View();
+        }
+
+        public ActionResult CreateQuery(SimpleQuery query)
+        {
+            var p = query.Values.Split(',');
+            var key = p[0];
+            var values = "";
+            foreach (var el in p)
+                if (el != key)
+                    values += el + "#";
+            if (query.Type == QueryType.Insert)
+            {
+                using (var tranz = dBreeze.GetTransaction())
+                {
+                    tranz.Insert(query.From, key, values);
+                    tranz.Commit();
+                }
+
+                var a = "";
+                var b = "";
+                using (var tranz = dBreeze.GetTransaction())
+                {
+                    var row = tranz.Select<string, string>(query.From, key);
+                    if (row.Exists)
+                        Console.WriteLine("------------" + row.Key + "--" + row.Value);
+                }
+            }
+            else
+            {
+                using (var tranz = dBreeze.GetTransaction())
+                {
+                    tranz.RemoveKey(query.From,key);
+                    tranz.Commit();
+                }
+            }
+
             return null;
         }
 
