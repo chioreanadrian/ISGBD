@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DBreeze, Version=1.92.2018.1029, Culture=neutral, PublicKeyToken=174b57f1c155f3c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\DBreeze.1.92.0\lib\net461\DBreeze.dll</HintPath>
+    </Reference>
     <Reference Include="libdb_dotnet61, Version=6.1.26.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Berkeley.DB.6.1.26\lib\net40\libdb_dotnet61.dll</HintPath>
     </Reference>
@@ -161,6 +164,9 @@
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldType.cs" />
     <Compile Include="Models\ForeignKey.cs" />
+    <Compile Include="Models\Query.cs" />
+    <Compile Include="Models\QueryType.cs" />
+    <Compile Include="Models\SimpleQuery.cs" />
     <Compile Include="Models\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -182,6 +188,7 @@
     <Content Include="Views\Home\ViewData.cshtml" />
     <Content Include="Views\Home\_AddPrimaryKey.cshtml" />
     <Content Include="Views\Home\_AddForeignKey.cshtml" />
+    <Content Include="Views\Home\_AddData.cshtml" />
     <Resource Include="Helpers\databases.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
