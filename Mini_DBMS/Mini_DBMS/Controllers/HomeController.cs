@@ -25,7 +25,8 @@ namespace Mini_DBMS.Controllers
         {
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
-            dBreeze = new DBreezeEngine("~/Helpers/dbreeze");
+            dBreeze?.Dispose();
+            dBreeze = new DBreezeEngine(@"C:\ISGBD\Dbreeze");
             return View(databases);
         }
 
@@ -169,27 +170,19 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateQuery(SimpleQuery query)
         {
-            var p = query.Values.Split(',');
-            var key = p[0];
-            var values = "";
-            foreach (var el in p)
-                if (el != key)
-                    values += el + "#";
+            var values = query.Values.Split(',');
+            var key = values[0];
+            var value = "";
+            for(var i=1;i<= values.Length - 2;i++)
+                    value += values[i] + "#";
+            value += values[values.Length-1];
+
             if (query.Type == QueryType.Insert)
             {
                 using (var tranz = dBreeze.GetTransaction())
                 {
-                    tranz.Insert(query.From, key, values);
+                    tranz.Insert(query.From, key, value);
                     tranz.Commit();
-                }
-
-                var a = "";
-                var b = "";
-                using (var tranz = dBreeze.GetTransaction())
-                {
-                    var row = tranz.Select<string, string>(query.From, key);
-                    if (row.Exists)
-                        Console.WriteLine("------------" + row.Key + "--" + row.Value);
                 }
             }
             else
