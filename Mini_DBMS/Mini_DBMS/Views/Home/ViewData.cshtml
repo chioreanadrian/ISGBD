@@ -3,5 +3,24 @@
     ViewBag.Title = "ViewData";
 }
 
-<h2>ViewData</h2>
+@model Mini_DBMS.Models.Table
+
+<table class="table">
+    <thead>
+    <tr>
+        @foreach (var field in @Model.Fields)
+        {
+            <th>@field.Name</th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        @foreach (var field in @Model.Fields)
+        {
+            @Html.EditorFor(x => field)
+        }
+    </tr>
+    </tbody>
+</table>
 

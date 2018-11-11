@@ -1,15 +1,10 @@
-﻿using System;
-using Mini_DBMS.Helpers;
+﻿using Mini_DBMS.Helpers;
 using Mini_DBMS.Models;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web.Hosting;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml;
-using System.Xml.Serialization;
 using DBreeze;
+using System.Web.Hosting;
 
 namespace Mini_DBMS.Controllers
 {
@@ -26,7 +21,8 @@ namespace Mini_DBMS.Controllers
             XMLOperationHelper = new XMLOperation();
             databases = XMLOperationHelper.ReadFromFile();
             dBreeze?.Dispose();
-            dBreeze = new DBreezeEngine(@"C:\ISGBD\Dbreeze");
+            var folderPath = HostingEnvironment.MapPath("~/Helpers/DBreeze");
+            dBreeze = new DBreezeEngine(folderPath);
             return View(databases);
         }
 
@@ -160,7 +156,15 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult ViewData(string tableName)
         {
-            return View();
+            var table = currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
+
+            if (table != null)
+            {
+                currentTable = table;
+                
+            }
+
+            return View(currentTable);
         }
 
         public ActionResult _AddData(SimpleQuery query)
