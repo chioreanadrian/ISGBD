@@ -161,6 +161,9 @@
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldType.cs" />
     <Compile Include="Models\ForeignKey.cs" />
+    <Compile Include="Models\Index.cs" />
+    <Compile Include="Models\IndexFile.cs" />
+    <Compile Include="Models\IndexType.cs" />
     <Compile Include="Models\Query.cs" />
     <Compile Include="Models\QueryType.cs" />
     <Compile Include="Models\SimpleQuery.cs" />

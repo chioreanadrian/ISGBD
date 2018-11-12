@@ -1,4 +1,5 @@
 ﻿
+@using Mini_DBMS.Models
 @model Mini_DBMS.Models.Table
 
 @{
@@ -23,22 +24,33 @@
 }))
 {
 
-    <fieldset>
-        <h3>Add index</h3>
+<fieldset>
+    <h3>Add index</h3>
 
-        <div class="form-group label-static is-empty">
-            <label class="control-label">Index name</label>
-            @Html.DropDownListFor(model => model.Index, fieldsItems, new { @class = "form-control" })
+    <div class="form-group label-static is-empty">
+        <label class="control-label">Index name</label>
+        @Html.DropDownListFor(model => model.Index, fieldsItems, new { @class = "form-control" })
 
+    </div>
+
+    <div class="form-group label-static is-empty">
+        <label class="control-label">Index type</label>
+        @Html.DropDownListFor(m => m.IndexType, new SelectList(Enum.GetValues(typeof(IndexType))), "Select type", new { @class = "form-control" })
+
+    </div>
+    
+    <div class="form-group label-static is-empty">
+        <label class="control-label">Unique</label>
+        @Html.CheckBoxFor(x => x.IndexUnique)
+    </div>
+
+    <div class="page-footer">
+        <div class="pull-right">
+            <button type="submit" class="btn btn-primary">Add<div clifs="ripple-container"></div></button>
         </div>
+    </div>
 
-        <div class="page-footer">
-            <div class="pull-right">
-                <button type="submit" class="btn btn-primary">Add<div clifs="ripple-container"></div></button>
-            </div>
-        </div>
-        
-    </fieldset>
+</fieldset>
 }
 
 
