@@ -10,6 +10,7 @@
         <ForeignKeys>
           <ForeignKey parentField="firsstname" refAttribute="idFromTable2" parentTable="table2" />
         </ForeignKeys>
+        <Values />
       </Table>
       <Table tableName="table2" fileName="table2.kv">
         <Attributes>
@@ -20,6 +21,7 @@
           <ForeignKey parentField="idFromTable2" refAttribute="id" parentTable="table1" />
           <ForeignKey parentField="id" refAttribute="firsstname" parentTable="table1" />
         </ForeignKeys>
+        <Values />
       </Table>
     </Tables>
   </Database>

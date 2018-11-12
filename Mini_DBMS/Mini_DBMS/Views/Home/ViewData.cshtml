@@ -7,20 +7,16 @@
 
 <table class="table">
     <thead>
-    <tr>
-        @foreach (var field in @Model.Fields)
-        {
-            <th>@field.Name</th>
-        }
-    </tr>
+        <tr>
+            @foreach (var field in @Model.Fields)
+            {
+                <th>@field.Name</th>
+            }
+        </tr>
     </thead>
-    <tbody>
-    <tr>
-        @foreach (var field in @Model.Fields)
-        {
-            @Html.EditorFor(x => field)
-        }
-    </tr>
-    </tbody>
 </table>
+
+<input type="button" value="Insert" onclick="location.href='@Url.Action("_AddData", "Home", new {tableName = Model.Name})'" />
+<input type="button" value="Delete" onclick="location.href='@Url.Action("_DeleteData", "Home", new {tableName = Model.Name})'" />
+
 

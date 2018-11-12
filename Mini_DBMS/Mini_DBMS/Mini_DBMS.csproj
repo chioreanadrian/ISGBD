@@ -184,6 +184,7 @@
     <Content Include="Views\Home\_AddPrimaryKey.cshtml" />
     <Content Include="Views\Home\_AddForeignKey.cshtml" />
     <Content Include="Views\Home\_AddData.cshtml" />
+    <Content Include="Views\Home\_DeleteData.cshtml" />
     <Resource Include="Helpers\databases.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

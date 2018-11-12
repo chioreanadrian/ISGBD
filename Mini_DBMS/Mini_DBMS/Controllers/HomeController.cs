@@ -1,6 +1,7 @@
 ﻿using Mini_DBMS.Helpers;
 using Mini_DBMS.Models;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using DBreeze;
@@ -169,20 +170,28 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult _AddData(SimpleQuery query)
         {
+            query.Type = QueryType.Insert;
             return View();
+        }
+
+        public ActionResult _DeleteData(SimpleQuery query)
+        {
+            query.From = currentTable.Name;
+            query.Type = QueryType.Delete;
+            return View(query);
         }
 
         public ActionResult CreateQuery(SimpleQuery query)
         {
-            var values = query.Values.Split(',');
-            var key = values[0];
-            var value = "";
-            for(var i=1;i<= values.Length - 2;i++)
-                    value += values[i] + "#";
-            value += values[values.Length-1];
-
             if (query.Type == QueryType.Insert)
             {
+                var values = query.Values.Split(',');
+                var key = values[0];
+                var value = string.Empty;
+                for (var i = 1; i <= values.Length - 2; i++)
+                    value += values[i] + "#";
+                value += values[values.Length - 1];
+
                 using (var tranz = dBreeze.GetTransaction())
                 {
                     tranz.Insert(query.From, key, value);
@@ -193,12 +202,13 @@ namespace Mini_DBMS.Controllers
             {
                 using (var tranz = dBreeze.GetTransaction())
                 {
-                    tranz.RemoveKey(query.From,key);
+                    tranz.RemoveKey(query.From, query.PrimaryKey);
                     tranz.Commit();
+                    Debug.WriteLine("deleted item with success");
                 }
             }
 
-            return null;
+            return View("ViewData", currentTable);
         }
 
         [HttpGet]
