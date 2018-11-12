@@ -10,6 +10,11 @@
         <ForeignKeys>
           <ForeignKey parentField="firsstname" refAttribute="idFromTable2" parentTable="table2" />
         </ForeignKeys>
+        <IndexFiles>
+          <IndexFile fileName="firsstname.ind" keyLength="50" indexType="BTree">
+            <IAttribute>firsstname</IAttribute>
+          </IndexFile>
+        </IndexFiles>
       </Table>
       <Table tableName="table2" fileName="table2.kv">
         <Attributes>
@@ -20,6 +25,23 @@
           <ForeignKey parentField="idFromTable2" refAttribute="id" parentTable="table1" />
           <ForeignKey parentField="id" refAttribute="firsstname" parentTable="table1" />
         </ForeignKeys>
+        <IndexFiles>
+          <IndexFile fileName="idFromTable2.ind" keyLength="23" indexType="BTree">
+            <IAttribute>idFromTable2</IAttribute>
+          </IndexFile>
+        </IndexFiles>
+      </Table>
+      <Table tableName="table3" fileName="table3.kv">
+        <Attributes>
+          <Attribute attributeName="nume" type="varchar" length="100" isnull="false" />
+        </Attributes>
+        <PrimaryKey>nume</PrimaryKey>
+        <ForeignKeys />
+        <IndexFiles>
+          <IndexFile fileName="nume.ind" keyLength="100" indexType="BTree">
+            <IAttribute>nume</IAttribute>
+          </IndexFile>
+        </IndexFiles>
       </Table>
     </Tables>
   </Database>

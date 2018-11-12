@@ -55,7 +55,7 @@ namespace Mini_DBMS.Controllers
                 if (t.Name == table.Name)
                     return View("Tables", currentDatabase);
 
-            table.FileName = string.Format("{0}.kv", table.Name.ToLower());
+            table.FileName = $"{table.Name.ToLower()}.kv";
             currentTable = table;
 
             currentTable.Fields = new List<Field>();
@@ -130,7 +130,21 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult AddIndex(Table table)
         {
-            currentTable.Index = table.Index;
+            var realField = new Field();
+            foreach (var db in databases)
+                foreach(var t in db.Tables)
+                    foreach(var f in t.Fields)
+                        if (f.Name == table.Index)
+                            realField = f;
+
+            var indexFile = new IndexFile
+            {
+                IndexName = table.Index,
+                KeyLength = realField.Length,
+                FileName = $"{table.Index}.ind",
+                IndexType = table.IndexType
+            };
+            currentTable.IndexFiles.Add(indexFile);
             return View("Fields", currentTable);
         }
 

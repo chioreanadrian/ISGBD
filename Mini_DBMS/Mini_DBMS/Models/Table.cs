@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 
 namespace Mini_DBMS.Models
@@ -21,7 +22,14 @@ namespace Mini_DBMS.Models
         [XmlArray("ForeignKeys")]
         public List<ForeignKey> ForeignKeys { get; set; }
 
-        [XmlElement("IndexAttribute")]
+        [XmlArray("IndexFiles")]
+        public List<IndexFile> IndexFiles { get; set; }
+
+        [XmlIgnore]
+        [ScriptIgnore]
         public string Index { get; set; }
+        [XmlIgnore]
+        [ScriptIgnore]
+        public IndexType IndexType { get; set; }
     }
 }
