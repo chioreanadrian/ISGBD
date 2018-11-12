@@ -12,7 +12,9 @@
         </ForeignKeys>
         <IndexFiles>
           <IndexFile fileName="firsstname.ind" keyLength="50" indexType="BTree">
-            <IAttribute>firsstname</IAttribute>
+            <IndexAttributes>
+              <IAttribute>firsstname</IAttribute>
+            </IndexAttributes>
           </IndexFile>
         </IndexFiles>
       </Table>
@@ -27,7 +29,9 @@
         </ForeignKeys>
         <IndexFiles>
           <IndexFile fileName="idFromTable2.ind" keyLength="23" indexType="BTree">
-            <IAttribute>idFromTable2</IAttribute>
+            <IndexAttributes>
+              <IAttribute>idFromTable2</IAttribute>
+            </IndexAttributes>
           </IndexFile>
         </IndexFiles>
       </Table>
@@ -37,11 +41,6 @@
         </Attributes>
         <PrimaryKey>nume</PrimaryKey>
         <ForeignKeys />
-        <IndexFiles>
-          <IndexFile fileName="nume.ind" keyLength="100" indexType="BTree">
-            <IAttribute>nume</IAttribute>
-          </IndexFile>
-        </IndexFiles>
       </Table>
     </Tables>
   </Database>

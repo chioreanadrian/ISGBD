@@ -131,20 +131,54 @@ namespace Mini_DBMS.Controllers
         public ActionResult AddIndex(Table table)
         {
             var realField = new Field();
+            var realTable = new Table();
+            
             foreach (var db in databases)
-                foreach(var t in db.Tables)
-                    foreach(var f in t.Fields)
+                foreach (var t in db.Tables)
+                    foreach (var f in t.Fields)
                         if (f.Name == table.Index)
+                        {
                             realField = f;
+                            realTable = t;
+                        }
 
             var indexFile = new IndexFile
             {
-                IndexName = table.Index,
+                Indexs = new List<Index>() {new Index{ IndexName = table.Index}},
                 KeyLength = realField.Length,
                 FileName = $"{table.Index}.ind",
-                IndexType = table.IndexType
+                IndexType = table.IndexType,
+                IsUnique = table.IndexUnique
             };
-            currentTable.IndexFiles.Add(indexFile);
+
+            if (!currentTable.IndexFiles.Any(c => c.Indexs.Any(z => z.IndexName == table.Index)))
+            {
+                if (table.IndexUnique)
+                {
+                    currentTable.IndexFiles.Add(indexFile);
+
+                    var value = string.Empty;
+
+                    var fieldsNotPk = realTable.Fields.Where(c => realTable.PrimaryKey != c.Name);
+
+                    foreach (var s in fieldsNotPk)
+                        if (s.Name != indexFile.Indexs.FirstOrDefault()?.IndexName)
+                            value += s.Name + "#";
+                    value = value.Remove(value.Length - 1);
+
+                    using (var tranz = dBreeze.GetTransaction())
+                    {
+                        tranz.Insert(table.Index, indexFile.Indexs.FirstOrDefault()?.IndexName, value );
+                        tranz.Commit();
+                    }
+                }
+            }
+            else
+            {
+                   // non-unique index file
+            }
+
+
             return View("Fields", currentTable);
         }
 
@@ -187,9 +221,9 @@ namespace Mini_DBMS.Controllers
             var values = query.Values.Split(',');
             var key = values[0];
             var value = "";
-            for(var i=1;i<= values.Length - 2;i++)
-                    value += values[i] + "#";
-            value += values[values.Length-1];
+            for (var i = 1; i <= values.Length - 2; i++)
+                value += values[i] + "#";
+            value += values[values.Length - 1];
 
             if (query.Type == QueryType.Insert)
             {
@@ -203,7 +237,7 @@ namespace Mini_DBMS.Controllers
             {
                 using (var tranz = dBreeze.GetTransaction())
                 {
-                    tranz.RemoveKey(query.From,key);
+                    tranz.RemoveKey(query.From, key);
                     tranz.Commit();
                 }
             }

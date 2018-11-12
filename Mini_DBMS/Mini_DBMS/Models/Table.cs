@@ -31,5 +31,10 @@ namespace Mini_DBMS.Models
         [XmlIgnore]
         [ScriptIgnore]
         public IndexType IndexType { get; set; }
+
+        [XmlIgnore]
+        [ScriptIgnore]
+        public bool IndexUnique { get; set; }
+
     }
 }
