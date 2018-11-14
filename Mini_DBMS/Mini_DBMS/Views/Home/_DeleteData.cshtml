@@ -1,0 +1,40 @@
+﻿@using Mini_DBMS.Models
+
+@model Mini_DBMS.Models.SimpleQuery
+@{
+    ViewBag.Title = "_DeleteData";
+}
+
+<h2>Query</h2>
+
+@using (Ajax.BeginForm("CreateQuery", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "DeleteValueModal"
+}))
+{
+    <body>
+    <fieldset>
+        @Html.HiddenFor(m => m.From)
+        @Html.HiddenFor(m => m.Type)
+        <div class="form-group label-static is-empty">
+            <label>Primary key:</label>
+            @Html.TextBoxFor(m => m.PrimaryKey, new {id = "key", @class = "form-control", placeholder = "key"})
+        </div>
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Execute query
+                    <div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+    </fieldset>
+    </body>
+
+}

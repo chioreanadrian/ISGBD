@@ -15,9 +15,9 @@ namespace Mini_DBMS.Helpers
 
             var serializer = new XmlSerializer(typeof(List<Database>));
 
-            var folderPath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
+            var filePath = HostingEnvironment.MapPath("~/Helpers/databases.xml");
 
-            using (var stream = new FileStream(folderPath, FileMode.Open))
+            using (var stream = new FileStream(filePath, FileMode.Open))
             {
                 using(var reader = XmlReader.Create(stream))
                 {
