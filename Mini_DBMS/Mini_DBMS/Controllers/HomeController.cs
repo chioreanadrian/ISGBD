@@ -52,7 +52,7 @@ namespace Mini_DBMS.Controllers
                 if (t.Name == table.Name)
                     return View("Tables", currentDatabase);
 
-            table.FileName = string.Format("{0}.kv", table.Name.ToLower());
+            table.FileName = $"{table.Name.ToLower()}.kv";
             currentTable = table;
 
             currentTable.Fields = new List<Field>();
@@ -127,7 +127,55 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult AddIndex(Table table)
         {
-            currentTable.Index = table.Index;
+            var realField = new Field();
+            var realTable = new Table();
+            
+            foreach (var db in databases)
+                foreach (var t in db.Tables)
+                    foreach (var f in t.Fields)
+                        if (f.Name == table.Index)
+                        {
+                            realField = f;
+                            realTable = t;
+                        }
+
+            var indexFile = new IndexFile
+            {
+                Indexs = new List<Index>() {new Index{ IndexName = table.Index}},
+                KeyLength = realField.Length,
+                FileName = $"{table.Index}.ind",
+                IndexType = table.IndexType,
+                IsUnique = table.IndexUnique
+            };
+
+            if (!currentTable.IndexFiles.Any(c => c.Indexs.Any(z => z.IndexName == table.Index)))
+            {
+                if (table.IndexUnique)
+                {
+                    currentTable.IndexFiles.Add(indexFile);
+
+                    var value = string.Empty;
+
+                    var fieldsNotPk = realTable.Fields.Where(c => realTable.PrimaryKey != c.Name);
+
+                    foreach (var s in fieldsNotPk)
+                        if (s.Name != indexFile.Indexs.FirstOrDefault()?.IndexName)
+                            value += s.Name + "#";
+                    value = value.Remove(value.Length - 1);
+
+                    using (var tranz = dBreeze.GetTransaction())
+                    {
+                        tranz.Insert(table.Index, indexFile.Indexs.FirstOrDefault()?.IndexName, value );
+                        tranz.Commit();
+                    }
+                }
+            }
+            else
+            {
+                   // non-unique index file
+            }
+
+
             return View("Fields", currentTable);
         }
 
