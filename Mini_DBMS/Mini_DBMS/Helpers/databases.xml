@@ -11,7 +11,7 @@
           <ForeignKey parentField="firsstname" refAttribute="idFromTable2" parentTable="table2" />
         </ForeignKeys>
         <IndexFiles>
-          <IndexFile fileName="firsstname.ind" keyLength="50" indexType="BTree">
+          <IndexFile fileName="firsstname.ind" keyLength="50" indexType="BTree" isUnique="false">
             <IndexAttributes>
               <IAttribute>firsstname</IAttribute>
             </IndexAttributes>
@@ -28,9 +28,14 @@
           <ForeignKey parentField="id" refAttribute="firsstname" parentTable="table1" />
         </ForeignKeys>
         <IndexFiles>
-          <IndexFile fileName="idFromTable2.ind" keyLength="23" indexType="BTree">
+          <IndexFile fileName="idFromTable2.ind" keyLength="23" indexType="BTree" isUnique="false">
             <IndexAttributes>
               <IAttribute>idFromTable2</IAttribute>
+            </IndexAttributes>
+          </IndexFile>
+          <IndexFile fileName="id.ind" keyLength="23" indexType="BTree" isUnique="true">
+            <IndexAttributes>
+              <IAttribute>id</IAttribute>
             </IndexAttributes>
           </IndexFile>
         </IndexFiles>
@@ -41,6 +46,7 @@
         </Attributes>
         <PrimaryKey>nume</PrimaryKey>
         <ForeignKeys />
+        <IndexFiles />
       </Table>
     </Tables>
   </Database>

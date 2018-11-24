@@ -1,4 +1,5 @@
-﻿using Mini_DBMS.Helpers;
+﻿using System;
+using Mini_DBMS.Helpers;
 using Mini_DBMS.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Web.Mvc;
 using DBreeze;
 using System.Web.Hosting;
+using Microsoft.Ajax.Utilities;
 
 namespace Mini_DBMS.Controllers
 {
@@ -239,11 +241,29 @@ namespace Mini_DBMS.Controllers
                 for (var i = 1; i <= values.Length - 2; i++)
                     value += values[i] + "#";
                 value += values[values.Length - 1];
+                
 
                 using (var tranz = dBreeze.GetTransaction())
                 {
-                    tranz.Insert(query.From, key, value);
+                    //check table exists
+                    if (dBreeze.Scheme.IfUserTableExists(query.From))
+                    {
+                        tranz.Insert(query.From, key, value);
+                    }
+                    else
+                    {
+                        tranz.InsertTable(query.From, key, 0);
+                        tranz.Insert(query.From, key, value);
+                    }
+                    
                     tranz.Commit();
+
+                    var row = tranz.Select<string, string>(query.From, key);
+                    if (row.Exists)
+                    {
+                        var r = row.Key;
+                        var y = row.Value;
+                    }
                 }
             }
             else
@@ -252,7 +272,11 @@ namespace Mini_DBMS.Controllers
                 {
                     tranz.RemoveKey(query.From, query.PrimaryKey);
                     tranz.Commit();
-                    Debug.WriteLine("deleted item with success");
+                    var row = tranz.Select<string, string>(query.From, query.PrimaryKey);
+                    if (!row.Exists)
+                        Debug.WriteLine("deleted item with success");
+                   
+                    
                 }
             }
 
