@@ -182,6 +182,7 @@
     <Content Include="Scripts\customs\addForeignKey.js" />
     <Content Include="Scripts\customs\addindex.js" />
     <Content Include="Scripts\customs\addPrimaryKey.js" />
+    <Content Include="Scripts\customs\viewData.js" />
     <Content Include="Views\Home\_AddIndex.cshtml" />
     <Content Include="Views\Home\ViewData.cshtml" />
     <Content Include="Views\Home\_AddPrimaryKey.cshtml" />

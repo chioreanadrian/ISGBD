@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DBreeze;
 using System.Web.Hosting;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json.Linq;
 
 namespace Mini_DBMS.Controllers
 {
@@ -218,10 +219,26 @@ namespace Mini_DBMS.Controllers
             return View(currentTable);
         }
 
-        public ActionResult _AddData(SimpleQuery query)
+        [HttpPost]
+        public ActionResult _AddData(string[] values)
         {
-            query.Type = QueryType.Insert;
-            return View();
+            var primaryKey = values[0];
+
+            string valueToAdd = string.Empty;
+            for (int index = 1; index < values.Length; index++)
+            {
+                valueToAdd += string.Format("{0}#", values[index]);
+            }
+
+            SimpleQuery query = new SimpleQuery
+            {
+                Type = QueryType.Insert,
+                From = currentTable.Name,
+                PrimaryKey = primaryKey,
+                Values = valueToAdd
+            };
+            CreateQuery(query);
+            return View("ViewData", currentTable);
         }
 
         public ActionResult _DeleteData(SimpleQuery query)
@@ -235,13 +252,8 @@ namespace Mini_DBMS.Controllers
         {
             if (query.Type == QueryType.Insert)
             {
-                var values = query.Values.Split(',');
-                var key = values[0];
-                var value = string.Empty;
-                for (var i = 1; i <= values.Length - 2; i++)
-                    value += values[i] + "#";
-                value += values[values.Length - 1];
-                
+                var key = query.PrimaryKey;
+                var value = query.Values;                
 
                 using (var tranz = dBreeze.GetTransaction())
                 {
