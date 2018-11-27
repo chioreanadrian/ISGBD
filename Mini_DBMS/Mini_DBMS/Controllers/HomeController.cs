@@ -225,10 +225,12 @@ namespace Mini_DBMS.Controllers
             var primaryKey = values[0];
 
             string valueToAdd = string.Empty;
-            for (int index = 1; index < values.Length; index++)
+            for (int index = 1; index < values.Length - 1; index++)
             {
                 valueToAdd += string.Format("{0}#", values[index]);
             }
+
+            valueToAdd += values[values.Length - 1];
 
             SimpleQuery query = new SimpleQuery
             {
