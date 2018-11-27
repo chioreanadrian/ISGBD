@@ -1,33 +1,28 @@
-﻿using System;
-using Mini_DBMS.Helpers;
+﻿using Mini_DBMS.Helpers;
 using Mini_DBMS.Models;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using DBreeze;
 using System.Web.Hosting;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json.Linq;
+using Mini_DBMS.Helpers.DBreeze;
 
 namespace Mini_DBMS.Controllers
 {
     public class HomeController : Controller
     {
-        private static Database currentDatabase;
-        private static Table currentTable;
-        private static List<Database> databases;
-        private static XMLOperation XMLOperationHelper;
-        private static DBreezeEngine dBreeze;
+        private static Database _currentDatabase;
+        private static Table _currentTable;
+        private static List<Database> _databases;
+        private static DBreezeEngine _dBreeze;
 
         public ActionResult Index()
         {
-            XMLOperationHelper = new XMLOperation();
-            databases = XMLOperationHelper.ReadFromFile();
-            dBreeze?.Dispose();
+            _databases = XMLOperation.ReadFromFile();
+            _dBreeze?.Dispose();
             var folderPath = HostingEnvironment.MapPath("~/Helpers/DBreeze");
-            dBreeze = new DBreezeEngine(folderPath);
-            return View(databases);
+            _dBreeze = new DBreezeEngine(folderPath);
+            return View(_databases);
         }
 
         [HttpGet]
@@ -35,15 +30,15 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateDatabase(Database database)
         {
-            currentDatabase = database;
-            currentDatabase.Tables = new List<Table>();
+            _currentDatabase = database;
+            _currentDatabase.Tables = new List<Table>();
 
-            if (databases.Select(d => d.Name).ToList().Contains(database.Name)) return View("Index", databases);
+            if (_databases.Select(d => d.Name).ToList().Contains(database.Name)) return View("Index", _databases);
 
-            databases.Add(database);
-            XMLOperationHelper.WriteToFile(databases);
+            _databases.Add(database);
+            XMLOperation.WriteToFile(_databases);
 
-            return View("Tables", currentDatabase);
+            return View("Tables", _currentDatabase);
         }
 
         [HttpGet]
@@ -51,16 +46,16 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateTable(Table table)
         {
-            foreach (var t in currentDatabase.Tables)
+            foreach (var t in _currentDatabase.Tables)
                 if (t.Name == table.Name)
-                    return View("Tables", currentDatabase);
+                    return View("Tables", _currentDatabase);
 
             table.FileName = $"{table.Name.ToLower()}.kv";
-            currentTable = table;
+            _currentTable = table;
 
-            currentTable.Fields = new List<Field>();
+            _currentTable.Fields = new List<Field>();
 
-            return View("Fields", currentTable);
+            return View("Fields", _currentTable);
         }
 
         [HttpGet]
@@ -68,64 +63,64 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult CreateField(Field field)
         {
-            foreach (var f in currentTable.Fields)
+            foreach (var f in _currentTable.Fields)
                 if (f.Name == field.Name)
-                    return View("Fields", currentTable);
+                    return View("Fields", _currentTable);
 
-            currentTable.Fields.Add(field);
+            _currentTable.Fields.Add(field);
 
-            return View("Fields", currentTable);
+            return View("Fields", _currentTable);
         }
 
         [HttpGet]
         public ActionResult GoToTables()
         {
-            if (!currentDatabase.Tables.Select(x => x.Name).Contains(currentTable.Name))
+            if (!_currentDatabase.Tables.Select(x => x.Name).Contains(_currentTable.Name))
             {
-                currentDatabase.Tables.Add(currentTable);
+                _currentDatabase.Tables.Add(_currentTable);
             }
 
-            return View("Tables", currentDatabase);
+            return View("Tables", _currentDatabase);
         }
 
         [HttpGet]
         public ActionResult GoToDatabases()
         {
-            XMLOperationHelper.WriteToFile(databases);
+            XMLOperation.WriteToFile(_databases);
 
-            return View("Index", databases);
+            return View("Index", _databases);
         }
 
         public ActionResult DeleteDatabase(string databaseName)
         {
-            Database databaseToDelete = databases.FirstOrDefault(x => x.Name == databaseName);
+            Database databaseToDelete = _databases.FirstOrDefault(x => x.Name == databaseName);
 
             if (databaseToDelete != null)
             {
-                databases.Remove(databaseToDelete);
+                _databases.Remove(databaseToDelete);
             }
 
-            XMLOperationHelper.WriteToFile(databases);
+            XMLOperation.WriteToFile(_databases);
 
-            return View("Index", databases);
+            return View("Index", _databases);
         }
 
         public ActionResult DeleteTable(string tableName)
         {
-            Table tableToDelete = currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
+            Table tableToDelete = _currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
 
             if (tableToDelete != null)
             {
-                currentDatabase.Tables.Remove(tableToDelete);
+                _currentDatabase.Tables.Remove(tableToDelete);
             }
 
-            return View("Tables", currentDatabase);
+            return View("Tables", _currentDatabase);
         }
 
         [HttpGet]
         public ActionResult AddIndex()
         {
-            return PartialView("_AddIndex", currentTable);
+            return PartialView("_AddIndex", _currentTable);
         }
 
         public ActionResult AddIndex(Table table)
@@ -133,7 +128,7 @@ namespace Mini_DBMS.Controllers
             var realField = new Field();
             var realTable = new Table();
             
-            foreach (var db in databases)
+            foreach (var db in _databases)
                 foreach (var t in db.Tables)
                     foreach (var f in t.Fields)
                         if (f.Name == table.Index)
@@ -151,11 +146,11 @@ namespace Mini_DBMS.Controllers
                 IsUnique = table.IndexUnique
             };
 
-            if (!currentTable.IndexFiles.Any(c => c.Indexs.Any(z => z.IndexName == table.Index)))
+            if (!_currentTable.IndexFiles.Any(c => c.Indexs.Any(z => z.IndexName == table.Index)))
             {
                 if (table.IndexUnique)
                 {
-                    currentTable.IndexFiles.Add(indexFile);
+                    _currentTable.IndexFiles.Add(indexFile);
 
                     var value = string.Empty;
 
@@ -166,7 +161,7 @@ namespace Mini_DBMS.Controllers
                             value += s.Name + "#";
                     value = value.Remove(value.Length - 1);
 
-                    using (var tranz = dBreeze.GetTransaction())
+                    using (var tranz = _dBreeze.GetTransaction())
                     {
                         tranz.Insert(table.Index, indexFile.Indexs.FirstOrDefault()?.IndexName, value );
                         tranz.Commit();
@@ -179,44 +174,44 @@ namespace Mini_DBMS.Controllers
             }
 
 
-            return View("Fields", currentTable);
+            return View("Fields", _currentTable);
         }
 
         public ActionResult ViewDatabase(string databaseName)
         {
-            var database = databases.FirstOrDefault(x => x.Name == databaseName);
+            var database = _databases.FirstOrDefault(x => x.Name == databaseName);
 
             if (database != null)
             {
-                currentDatabase = database;
-                return View("Tables", currentDatabase);
+                _currentDatabase = database;
+                return View("Tables", _currentDatabase);
             }
 
             return null;
         }
         public ActionResult ViewFields(string tableName)
         {
-            var table = currentDatabase.Tables.FirstOrDefault(t => t.Name == tableName);
+            var table = _currentDatabase.Tables.FirstOrDefault(t => t.Name == tableName);
 
             if (table != null)
             {
-                currentTable = table;
-                return View("Fields", currentTable);
+                _currentTable = table;
+                return View("Fields", _currentTable);
             }
             return null;
         }
 
         public ActionResult ViewData(string tableName)
         {
-            var table = currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
+            var table = _currentDatabase.Tables.FirstOrDefault(x => x.Name == tableName);
 
             if (table != null)
             {
-                currentTable = table;
+                _currentTable = table;
                 
             }
 
-            return View(currentTable);
+            return View(_currentTable);
         }
 
         [HttpPost]
@@ -235,17 +230,17 @@ namespace Mini_DBMS.Controllers
             SimpleQuery query = new SimpleQuery
             {
                 Type = QueryType.Insert,
-                From = currentTable.Name,
+                From = _currentTable.Name,
                 PrimaryKey = primaryKey,
                 Values = valueToAdd
             };
             CreateQuery(query);
-            return View("ViewData", currentTable);
+            return View("ViewData", _currentTable);
         }
 
         public ActionResult _DeleteData(SimpleQuery query)
         {
-            query.From = currentTable.Name;
+            query.From = _currentTable.Name;
             query.Type = QueryType.Delete;
             return View(query);
         }
@@ -254,59 +249,26 @@ namespace Mini_DBMS.Controllers
         {
             if (query.Type == QueryType.Insert)
             {
-                var key = query.PrimaryKey;
-                var value = query.Values;                
-
-                using (var tranz = dBreeze.GetTransaction())
-                {
-                    //check table exists
-                    if (dBreeze.Scheme.IfUserTableExists(query.From))
-                    {
-                        tranz.Insert(query.From, key, value);
-                    }
-                    else
-                    {
-                        tranz.InsertTable(query.From, key, 0);
-                        tranz.Insert(query.From, key, value);
-                    }
-                    
-                    tranz.Commit();
-
-                    var row = tranz.Select<string, string>(query.From, key);
-                    if (row.Exists)
-                    {
-                        var r = row.Key;
-                        var y = row.Value;
-                    }
-                }
+                DBreezeOperations.AddData(_dBreeze, query);
             }
             else
             {
-                using (var tranz = dBreeze.GetTransaction())
-                {
-                    tranz.RemoveKey(query.From, query.PrimaryKey);
-                    tranz.Commit();
-                    var row = tranz.Select<string, string>(query.From, query.PrimaryKey);
-                    if (!row.Exists)
-                        Debug.WriteLine("deleted item with success");
-                   
-                    
-                }
+                DBreezeOperations.DeleteData(_dBreeze, query);
             }
 
-            return View("ViewData", currentTable);
+            return View("ViewData", _currentTable);
         }
 
         [HttpGet]
         public ActionResult AddPrimaryKey()
         {
-            return PartialView("_AddPrimaryKey", currentTable);
+            return PartialView("_AddPrimaryKey", _currentTable);
         }
 
         public ActionResult AddPrimaryKey(Table table)
         {
-            currentTable.PrimaryKey = table.PrimaryKey;
-            return View("Fields", currentTable);
+            _currentTable.PrimaryKey = table.PrimaryKey;
+            return View("Fields", _currentTable);
         }
 
         [HttpGet]
@@ -314,8 +276,8 @@ namespace Mini_DBMS.Controllers
         {
             var databaseForModel = new Database();
             databaseForModel.Tables = new List<Table>();
-            databaseForModel.Tables.AddRange(currentDatabase.Tables);
-            databaseForModel.Tables.Remove(currentTable);
+            databaseForModel.Tables.AddRange(_currentDatabase.Tables);
+            databaseForModel.Tables.Remove(_currentTable);
 
             AddForeignKeyModel model = new AddForeignKeyModel
             {
@@ -328,17 +290,17 @@ namespace Mini_DBMS.Controllers
 
         public ActionResult AddForeignKey(AddForeignKeyModel model)
         {
-            var table = currentDatabase.Tables.FirstOrDefault(x => x.Name == model.ReferencedTable);
+            var table = _currentDatabase.Tables.FirstOrDefault(x => x.Name == model.ReferencedTable);
             if (table != null)
             {
                 if (table.Fields.Select(x => x.Name).Contains(model.ReferencedProperty))
                 {
-                    if (currentTable.ForeignKeys == null)
+                    if (_currentTable.ForeignKeys == null)
                     {
-                        currentTable.ForeignKeys = new List<ForeignKey>();
+                        _currentTable.ForeignKeys = new List<ForeignKey>();
                     }
 
-                    currentTable.ForeignKeys.Add(new ForeignKey
+                    _currentTable.ForeignKeys.Add(new ForeignKey
                     {
                         ParentField = model.Field,
                         Field = model.ReferencedProperty,
@@ -347,7 +309,7 @@ namespace Mini_DBMS.Controllers
                 }
             }
 
-            return View("Fields", currentTable);
+            return View("Fields", _currentTable);
 
         }
 

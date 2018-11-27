@@ -7,9 +7,9 @@ using System.Xml.Serialization;
 
 namespace Mini_DBMS.Helpers
 {
-    public class XMLOperation
+    public static class XMLOperation
     {
-        public List<Database> ReadFromFile()
+        public static List<Database> ReadFromFile()
         {
             var databases = new List<Database>();
 
@@ -28,7 +28,7 @@ namespace Mini_DBMS.Helpers
             return databases;
         }
 
-        public void WriteToFile(List<Database> databases)
+        public static void WriteToFile(List<Database> databases)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Database>));
 
