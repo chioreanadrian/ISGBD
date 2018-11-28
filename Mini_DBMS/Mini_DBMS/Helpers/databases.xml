@@ -7,6 +7,7 @@
           <Attribute attributeName="id" type="number" length="100" isnull="false" />
           <Attribute attributeName="firsstname" type="varchar" length="50" isnull="true" />
         </Attributes>
+        <PrimaryKey>id</PrimaryKey>
         <ForeignKeys>
           <ForeignKey parentField="firsstname" refAttribute="idFromTable2" parentTable="table2" />
         </ForeignKeys>
@@ -45,6 +46,16 @@
           <Attribute attributeName="nume" type="varchar" length="100" isnull="false" />
         </Attributes>
         <PrimaryKey>nume</PrimaryKey>
+        <ForeignKeys />
+        <IndexFiles />
+      </Table>
+      <Table tableName="testtable" fileName="testtable.kv">
+        <Attributes>
+          <Attribute attributeName="id" type="number" length="0" isnull="false" />
+          <Attribute attributeName="nume" type="varchar" length="100" isnull="false" />
+          <Attribute attributeName="varsta" type="number" length="0" isnull="false" />
+        </Attributes>
+        <PrimaryKey>id</PrimaryKey>
         <ForeignKeys />
         <IndexFiles />
       </Table>
