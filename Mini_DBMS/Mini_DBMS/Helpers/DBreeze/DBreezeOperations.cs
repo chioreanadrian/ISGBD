@@ -62,12 +62,18 @@ namespace Mini_DBMS.Helpers.DBreeze
             }
         }
 
-        public static void GetConditionedData(DBreezeEngine dBreeze, Table table,string field, FieldType fieldType, ConditionType condition, string value)
+        public static void GetConditionedData(DBreezeEngine dBreeze, Table table, string field, FieldType fieldType, ConditionType condition, string value)
         {
             var dic = new Dictionary<string, string>();
 
             using (var transaction = dBreeze.GetTransaction())
             {
+                if(dBreeze.Scheme.IfUserTableExists(field))
+                {
+                    foreach (var row in transaction.SelectForward<string, string>(field))
+                        dic.Add(row.Key, row.Value);
+                }
+                else
                 foreach (var row in transaction.SelectForward<string, string>(table.Name))
                     dic.Add(row.Key, row.Value);
             }
@@ -79,7 +85,7 @@ namespace Mini_DBMS.Helpers.DBreeze
 
             var fields = table.Fields.Where(c => c.Name != table.PrimaryKey);
 
-            foreach(var f in fields)
+            foreach (var f in fields)
                 if (f.Name != field)
                 {
                     fieldCount += 1;
@@ -89,18 +95,18 @@ namespace Mini_DBMS.Helpers.DBreeze
                     ftype = f.Type;
                     break;
                 }
-                    
+
 
             foreach (var pair in dic)
             {
                 var values = pair.Value.Split('#');
-                var fieldCautat = values[fieldCount-1];
+                var fieldCautat = values[fieldCount - 1];
                 switch (condition)
                 {
                     //string
                     case ConditionType.Equal
                         when fieldCautat == value && fieldType == FieldType.varchar:
-                        returnDic.Add(pair.Key,pair.Value);
+                        returnDic.Add(pair.Key, pair.Value);
                         break;
 
                     //number
@@ -119,7 +125,7 @@ namespace Mini_DBMS.Helpers.DBreeze
 
                     //datetime
                     case ConditionType.Equal
-                        when fieldType == FieldType.datetime && DateTime.Parse(fieldCautat) == DateTime.Parse(value) :
+                        when fieldType == FieldType.datetime && DateTime.Parse(fieldCautat) == DateTime.Parse(value):
                         returnDic.Add(pair.Key, pair.Value);
                         break;
                     case ConditionType.Less
@@ -138,10 +144,18 @@ namespace Mini_DBMS.Helpers.DBreeze
         {
             var dic = new Dictionary<string, string>();
 
+
+
             using (var transaction = dBreeze.GetTransaction())
             {
-                foreach (var row in transaction.SelectForward<string, string>(table.Name))
-                    dic.Add(row.Key, row.Value);
+                if (dBreeze.Scheme.IfUserTableExists(pk))
+                {
+                    foreach (var row in transaction.SelectForward<string, string>(pk))
+                        dic.Add(row.Key, row.Value);
+                }
+                else
+                    foreach (var row in transaction.SelectForward<string, string>(table.Name))
+                        dic.Add(row.Key, row.Value);
             }
 
             var returnDic = new Dictionary<string, string>();
@@ -163,13 +177,13 @@ namespace Mini_DBMS.Helpers.DBreeze
                             when Int32.Parse(pair.Key) > Int32.Parse(value) && pkFieldType == FieldType.number:
                             returnDic.Add(pair.Key, pair.Value);
                             break;
-                        
+
                         //string
                         case ConditionType.Equal
                             when pair.Key == value && pkFieldType == FieldType.varchar:
                             returnDic.Add(pair.Key, pair.Value);
                             break;
-                        
+
                         //datetime
                         case ConditionType.Equal
                             when DateTime.Parse(pair.Key) == DateTime.Parse(value) && pkFieldType == FieldType.datetime:
