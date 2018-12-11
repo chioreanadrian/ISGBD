@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using DBreeze;
@@ -20,6 +21,7 @@ namespace Mini_DBMS.Helpers.DBreeze
                 if (dBreeze.Scheme.IfUserTableExists(query.From))
                 {
                     transaction.Insert(query.From, key, value);
+
                 }
                 else
                 {
@@ -39,10 +41,15 @@ namespace Mini_DBMS.Helpers.DBreeze
             }
         }
 
-        public static void DeleteData(DBreezeEngine dBreeze, SimpleQuery query)
+        public static void DeleteData(DBreezeEngine dBreeze, SimpleQuery query, Table currentTable, Database currentDatabase)
         {
             using (var transaction = dBreeze.GetTransaction())
             {
+                foreach(var t in currentDatabase.Tables)
+                    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
+                        return;
+                
+
                 transaction.RemoveKey(query.From, query.PrimaryKey);
                 transaction.Commit();
                 var row = transaction.Select<string, string>(query.From, query.PrimaryKey);
@@ -51,7 +58,7 @@ namespace Mini_DBMS.Helpers.DBreeze
             }
         }
 
-        public static void GetAllData(DBreezeEngine dBreeze, string tableName)
+        public static Dictionary<string, string> GetAllData(DBreezeEngine dBreeze, string tableName)
         {
             var dic = new Dictionary<string, string>();
 
@@ -60,9 +67,11 @@ namespace Mini_DBMS.Helpers.DBreeze
                 foreach (var row in transaction.SelectForward<string, string>(tableName))
                     dic.Add(row.Key, row.Value);
             }
+
+            return dic;
         }
 
-        public static void GetConditionedData(DBreezeEngine dBreeze, Table table, string field, FieldType fieldType, ConditionType condition, string value)
+        public static Dictionary<string, string> GetConditionedData(DBreezeEngine dBreeze, Table table, string field, FieldType fieldType, ConditionType condition, string value)
         {
             var dic = new Dictionary<string, string>();
 
@@ -138,13 +147,12 @@ namespace Mini_DBMS.Helpers.DBreeze
                         break;
                 }
             }
+            return dic;
         }
 
-        public static void GetDataPK(DBreezeEngine dBreeze, Table table, string pk, FieldType pkFieldType, ConditionType condition, string value)
+        public static Dictionary<string, string> GetDataPK(DBreezeEngine dBreeze, Table table, string pk, FieldType pkFieldType, ConditionType condition, string value)
         {
             var dic = new Dictionary<string, string>();
-
-
 
             using (var transaction = dBreeze.GetTransaction())
             {
@@ -198,7 +206,7 @@ namespace Mini_DBMS.Helpers.DBreeze
                             returnDic.Add(pair.Key, pair.Value);
                             break;
                     }
-
+            return dic;
         }
     }
 }
