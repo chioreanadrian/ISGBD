@@ -130,18 +130,19 @@ namespace Mini_DBMS.Controllers
             
             foreach (var db in _databases)
                 foreach (var t in db.Tables)
-                    foreach (var f in t.Fields)
-                        if (f.Name == table.Index)
-                        {
-                            realField = f;
-                            realTable = t;
-                        }
+                    if(t.Name == table.Name)
+                        foreach (var f in t.Fields)
+                            if (f.Name == table.Index)
+                            {
+                                realField = f;
+                                realTable = t;
+                            }
 
             var indexFile = new IndexFile
             {
-                Indexs = new List<Index>() {new Index{ IndexName = table.Index}},
+                Indexs = new List<Index>() {new Index{ IndexName = table.FileName}}, // index name is set on FileName attribute in _AddIndex.cshtml
                 KeyLength = realField.Length,
-                FileName = $"{table.Index}.ind",
+                FileName = $"{table.FileName}.ind",
                 IndexType = table.IndexType,
                 IsUnique = table.IndexUnique
             };
@@ -163,7 +164,16 @@ namespace Mini_DBMS.Controllers
 
                     using (var tranz = _dBreeze.GetTransaction())
                     {
-                        tranz.Insert(table.Index, indexFile.Indexs.FirstOrDefault()?.IndexName, value );
+                        if (!_dBreeze.Scheme.IfUserTableExists(table.FileName))
+                        {
+                            tranz.InsertTable(table.FileName, table.Index, 0);
+
+                            var pairs = DBreezeOperations.GetAllData(_dBreeze, table.Name).OrderBy(c => c.Key);
+
+                            foreach (var v in pairs)
+                                tranz.Insert(table.Index, v.Key, v.Value);
+                        }
+
                         tranz.Commit();
                     }
                 }
@@ -250,13 +260,13 @@ namespace Mini_DBMS.Controllers
             if (query.Type == QueryType.Insert)
             {
                 DBreezeOperations.AddData(_dBreeze, query);
-                //DBreezeOperations.GetAllData(_dBreeze,_currentTable.Name);
+                DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
                 //DBreezeOperations.GetDataPK(_dBreeze, _currentTable, _currentTable.PrimaryKey, FieldType.number, ConditionType.Less, "10");
-                DBreezeOperations.GetConditionedData(_dBreeze, _currentTable, "firsstname", FieldType.varchar, ConditionType.Equal, "ell");
+                //DBreezeOperations.GetConditionedData(_dBreeze, _currentTable, "firsstname", FieldType.varchar, ConditionType.Equal, "ell");
             }
             else
             {
-                DBreezeOperations.DeleteData(_dBreeze, query);
+                DBreezeOperations.DeleteData(_dBreeze, query, _currentTable,_currentDatabase);
             }
 
             return View("ViewData", _currentTable);
