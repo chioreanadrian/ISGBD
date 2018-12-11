@@ -217,6 +217,17 @@ namespace Mini_DBMS.Controllers
 
             if (table != null)
             {
+                var dataList = DBreezeOperations.GetAllData(_dBreeze, table.Name);
+
+                if (dataList == null)
+                {
+                    table.DataList = new Dictionary<string, string>();
+                }
+                else
+                {
+                    table.DataList = dataList;
+                }
+
                 _currentTable = table;
                 
             }
@@ -260,7 +271,7 @@ namespace Mini_DBMS.Controllers
             if (query.Type == QueryType.Insert)
             {
                 DBreezeOperations.AddData(_dBreeze, query);
-                DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
+                _currentTable.DataList = DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
                 //DBreezeOperations.GetDataPK(_dBreeze, _currentTable, _currentTable.PrimaryKey, FieldType.number, ConditionType.Less, "10");
                 //DBreezeOperations.GetConditionedData(_dBreeze, _currentTable, "firsstname", FieldType.varchar, ConditionType.Equal, "ell");
             }

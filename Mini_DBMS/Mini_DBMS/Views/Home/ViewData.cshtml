@@ -9,13 +9,22 @@
 
 <table class="table">
     <thead>
-        <tr>
-            @foreach (var field in @Model.Fields)
-            {
-                <th>@field.Name</th>
-            }
-        </tr>
+    <tr>
+        @foreach (var field in @Model.Fields)
+        {
+            <th>@field.Name</th>
+        }
+    </tr>
     </thead>
+    <tbody>
+    @foreach (var value in @Model.DataList)
+    {
+        <tr>
+            <td>@value.Key</td>
+            <td>@value.Value</td>
+        </tr>
+    }
+    </tbody>
 </table>
 
 @foreach (var field in @Model.Fields)
