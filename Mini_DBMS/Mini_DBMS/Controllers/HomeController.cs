@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using DBreeze;
 using System.Web.Hosting;
 using Mini_DBMS.Helpers.DBreeze;
+using System;
+using Microsoft.Ajax.Utilities;
+using FieldType = Mini_DBMS.Models.FieldType;
 
 namespace Mini_DBMS.Controllers
 {
@@ -340,12 +343,46 @@ namespace Mini_DBMS.Controllers
         public ActionResult ConditionalSearchPage()
         {
             ConditionalDataModel model = new ConditionalDataModel();
+            model.Table = _currentTable;
+            model.ValuesFound = new Dictionary<string, string>();
             return View("ConditionalSearch", model);
         }
 
         [HttpPost]
         public ActionResult ConditionalSearch(ConditionalDataModel model)
         {
+            model.Table = _currentTable;
+            try
+            {
+                model.ValuesFound = DBreezeOperations.GetConditionedData(_dBreeze, model.Table, model.FieldValue,
+                    model.FieldType, model.ConditionType, model.SearchedValue);
+            }
+            catch (Exception)
+            {
+
+            }
+
+            // great hack!
+            if (model.FieldType == FieldType.number)
+            {
+                switch (model.ConditionType)
+                {
+                    case ConditionType.Equal:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) == int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                    case ConditionType.Greater:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) > int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                    case ConditionType.Less:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) < int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                }
+            }
+            else if (model.FieldType == FieldType.varchar)
+            {
+                model.ValuesFound = model.ValuesFound.Where(x => x.Value.Contains(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+            }
+
             return View(model);
         }
 

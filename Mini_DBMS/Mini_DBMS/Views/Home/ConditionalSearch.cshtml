@@ -7,6 +7,14 @@
     ViewBag.Title = "ConditionalSearch";
 }
 
+@{
+         var tableFields = Model.Table.Fields.Select(x => new SelectListItem
+         {
+             Text = x.Name,
+             Value = x.Name
+         });
+}
+
 <h2>Conditional search in table @Model.Table.Name</h2>
 
 @using (Ajax.BeginForm("ConditionalSearch", "Home", new AjaxOptions
@@ -23,10 +31,12 @@
 }))
 {
     <fieldset>
-           
+        @Html.HiddenFor(m => m.Table)
+        @Html.HiddenFor(x => x.ValuesFound)
+
         <div class="form-group label-static is-empty">
             <label class="control-label">Field value</label>
-            @Html.TextBoxFor(m => m.FieldValue, new { id = "name", @class = "form-control", placeholder = "Field value" })
+            @Html.DropDownListFor(m => m.FieldValue, tableFields, new { @class = "form-control" })
         </div>
             
         <div class="form-group label-static is-empty">
