@@ -1,0 +1,91 @@
+﻿@using Mini_DBMS.Models
+
+
+@model Mini_DBMS.Models.ConditionalDataModel
+
+@{
+    ViewBag.Title = "ConditionalSearch";
+}
+
+@{
+         var tableFields = Model.Table.Fields.Select(x => new SelectListItem
+         {
+             Text = x.Name,
+             Value = x.Name
+         });
+}
+
+<h2>Conditional search in table @Model.Table.Name</h2>
+
+@using (Ajax.BeginForm("ConditionalSearch", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "onModalSuccess",
+    OnFailure = "onModalError",
+}, new
+{
+    @class = "form-card vertical-center",
+    role = "form",
+    id = "DeleteValueModal"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Table)
+        @Html.HiddenFor(x => x.ValuesFound)
+
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Field value</label>
+            @Html.DropDownListFor(m => m.FieldValue, tableFields, new { @class = "form-control" })
+        </div>
+            
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Field type</label>
+            @Html.DropDownListFor(m => m.FieldType, new SelectList(Enum.GetValues(typeof(FieldType))), "Select field type", new { @class = "form-control" })
+        </div>
+            
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Condition type</label>
+            @Html.DropDownListFor(m => m.ConditionType, new SelectList(Enum.GetValues(typeof(ConditionType))), "Select field type", new { @class = "form-control" })
+        </div>
+            
+        <div class="form-group label-static is-empty">
+            <label class="control-label">Searched value</label>
+            @Html.TextBoxFor(m => m.SearchedValue, new { id = "name", @class = "form-control", placeholder = "Searched value" })
+        </div>
+            
+        <div class="page-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Create<div clifs="ripple-container"></div></button>
+            </div>
+        </div>
+    </fieldset>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            @foreach (var field in @Model.Table.Fields)
+            {
+                <th>@field.Name</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var pair in @Model.ValuesFound)
+        {
+            <tr>
+                <td>@pair.Key</td>
+                @{
+                    var listOfValues = pair.Value.Split('#');
+                    foreach (var value in listOfValues)
+                    {
+                        <td>@value</td>
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+

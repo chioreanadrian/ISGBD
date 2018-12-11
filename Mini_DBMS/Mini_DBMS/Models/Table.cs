@@ -36,5 +36,9 @@ namespace Mini_DBMS.Models
         [ScriptIgnore]
         public bool IndexUnique { get; set; }
 
+        [XmlIgnore]
+        [ScriptIgnore]
+        public Dictionary<string, string> DataList { get; set; }
+
     }
 }

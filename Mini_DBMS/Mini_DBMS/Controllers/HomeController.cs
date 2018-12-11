@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using DBreeze;
 using System.Web.Hosting;
 using Mini_DBMS.Helpers.DBreeze;
+using System;
+using Microsoft.Ajax.Utilities;
+using FieldType = Mini_DBMS.Models.FieldType;
 
 namespace Mini_DBMS.Controllers
 {
@@ -217,6 +220,17 @@ namespace Mini_DBMS.Controllers
 
             if (table != null)
             {
+                var dataList = DBreezeOperations.GetAllData(_dBreeze, table.Name);
+
+                if (dataList == null)
+                {
+                    table.DataList = new Dictionary<string, string>();
+                }
+                else
+                {
+                    table.DataList = dataList;
+                }
+
                 _currentTable = table;
                 
             }
@@ -260,7 +274,6 @@ namespace Mini_DBMS.Controllers
             if (query.Type == QueryType.Insert)
             {
                 DBreezeOperations.AddData(_dBreeze, query);
-                DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
                 //DBreezeOperations.GetDataPK(_dBreeze, _currentTable, _currentTable.PrimaryKey, FieldType.number, ConditionType.Less, "10");
                 //DBreezeOperations.GetConditionedData(_dBreeze, _currentTable, "firsstname", FieldType.varchar, ConditionType.Equal, "ell");
             }
@@ -268,6 +281,7 @@ namespace Mini_DBMS.Controllers
             {
                 DBreezeOperations.DeleteData(_dBreeze, query, _currentTable,_currentDatabase);
             }
+            _currentTable.DataList = DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
 
             return View("ViewData", _currentTable);
         }
@@ -324,6 +338,52 @@ namespace Mini_DBMS.Controllers
 
             return View("Fields", _currentTable);
 
+        }
+
+        public ActionResult ConditionalSearchPage()
+        {
+            ConditionalDataModel model = new ConditionalDataModel();
+            model.Table = _currentTable;
+            model.ValuesFound = new Dictionary<string, string>();
+            return View("ConditionalSearch", model);
+        }
+
+        [HttpPost]
+        public ActionResult ConditionalSearch(ConditionalDataModel model)
+        {
+            model.Table = _currentTable;
+            try
+            {
+                model.ValuesFound = DBreezeOperations.GetConditionedData(_dBreeze, model.Table, model.FieldValue,
+                    model.FieldType, model.ConditionType, model.SearchedValue);
+            }
+            catch (Exception)
+            {
+
+            }
+
+            // great hack!
+            if (model.FieldType == FieldType.number)
+            {
+                switch (model.ConditionType)
+                {
+                    case ConditionType.Equal:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) == int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                    case ConditionType.Greater:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) > int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                    case ConditionType.Less:
+                        model.ValuesFound = _currentTable.DataList.Where(x => int.Parse(x.Key) < int.Parse(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+                        break;
+                }
+            }
+            else if (model.FieldType == FieldType.varchar)
+            {
+                model.ValuesFound = model.ValuesFound.Where(x => x.Value.Contains(model.SearchedValue)).ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            return View(model);
         }
 
     }

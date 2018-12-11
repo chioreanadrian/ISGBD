@@ -45,16 +45,15 @@ namespace Mini_DBMS.Helpers.DBreeze
         {
             using (var transaction = dBreeze.GetTransaction())
             {
-                foreach(var t in currentDatabase.Tables)
-                    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
-                        return;
-                
+                //foreach(var t in currentDatabase.Tables)
+                //    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
+                //        return;               
 
                 transaction.RemoveKey(query.From, query.PrimaryKey);
                 transaction.Commit();
                 var row = transaction.Select<string, string>(query.From, query.PrimaryKey);
                 if (!row.Exists)
-                    Debug.WriteLine("deleted item with success");
+                    Debug.WriteLine("item deleted with success");
             }
         }
 
@@ -77,14 +76,14 @@ namespace Mini_DBMS.Helpers.DBreeze
 
             using (var transaction = dBreeze.GetTransaction())
             {
-                if(dBreeze.Scheme.IfUserTableExists(field))
+                if (dBreeze.Scheme.IfUserTableExists(table.Name))
                 {
-                    foreach (var row in transaction.SelectForward<string, string>(field))
+                    foreach (var row in transaction.SelectForward<string, string>(table.Name))
                         dic.Add(row.Key, row.Value);
                 }
                 else
-                foreach (var row in transaction.SelectForward<string, string>(table.Name))
-                    dic.Add(row.Key, row.Value);
+                    foreach (var row in transaction.SelectForward<string, string>(table.Name))
+                        dic.Add(row.Key, row.Value);
             }
 
             var returnDic = new Dictionary<string, string>();
@@ -109,7 +108,7 @@ namespace Mini_DBMS.Helpers.DBreeze
             foreach (var pair in dic)
             {
                 var values = pair.Value.Split('#');
-                var fieldCautat = values[fieldCount - 1];
+                var fieldCautat = values[values.Length - 1];
                 switch (condition)
                 {
                     //string
@@ -147,6 +146,9 @@ namespace Mini_DBMS.Helpers.DBreeze
                         break;
                 }
             }
+
+
+
             return dic;
         }
 
