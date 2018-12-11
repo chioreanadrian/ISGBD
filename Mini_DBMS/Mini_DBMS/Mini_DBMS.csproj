@@ -158,6 +158,7 @@
     <Compile Include="Helpers\DBreeze\DBreezeOperations.cs" />
     <Compile Include="Helpers\XMLOperation.cs" />
     <Compile Include="Models\AddForeignKeyModel.cs" />
+    <Compile Include="Models\ConditionalDataModel.cs" />
     <Compile Include="Models\ConditionType.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\Field.cs" />
@@ -191,6 +192,7 @@
     <Content Include="Views\Home\_AddForeignKey.cshtml" />
     <Content Include="Views\Home\_AddData.cshtml" />
     <Content Include="Views\Home\_DeleteData.cshtml" />
+    <Content Include="Views\Home\ConditionalSearch.cshtml" />
     <Resource Include="Helpers\databases.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

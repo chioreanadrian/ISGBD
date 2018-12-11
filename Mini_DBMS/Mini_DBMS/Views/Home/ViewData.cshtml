@@ -17,11 +17,17 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var value in @Model.DataList)
+    @foreach (var pair in @Model.DataList)
     {
         <tr>
-            <td>@value.Key</td>
-            <td>@value.Value</td>
+            <td>@pair.Key</td>
+            @{
+                var listOfValues = pair.Value.Split('#');
+                foreach (var value in listOfValues)
+                {
+                    <td>@value</td>
+                }
+            }
         </tr>
     }
     </tbody>
@@ -38,4 +44,5 @@
 </br>
 <input type="button" value="Delete" onclick="location.href='@Url.Action("_DeleteData", "Home", new {tableName = Model.Name})'" />
 
+<input type="button" value="Conditional search" onclick="location.href='@Url.Action("ConditionalSearchPage", "Home")" />
 

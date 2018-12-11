@@ -271,7 +271,6 @@ namespace Mini_DBMS.Controllers
             if (query.Type == QueryType.Insert)
             {
                 DBreezeOperations.AddData(_dBreeze, query);
-                _currentTable.DataList = DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
                 //DBreezeOperations.GetDataPK(_dBreeze, _currentTable, _currentTable.PrimaryKey, FieldType.number, ConditionType.Less, "10");
                 //DBreezeOperations.GetConditionedData(_dBreeze, _currentTable, "firsstname", FieldType.varchar, ConditionType.Equal, "ell");
             }
@@ -279,6 +278,7 @@ namespace Mini_DBMS.Controllers
             {
                 DBreezeOperations.DeleteData(_dBreeze, query, _currentTable,_currentDatabase);
             }
+            _currentTable.DataList = DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
 
             return View("ViewData", _currentTable);
         }
@@ -335,6 +335,18 @@ namespace Mini_DBMS.Controllers
 
             return View("Fields", _currentTable);
 
+        }
+
+        public ActionResult ConditionalSearchPage()
+        {
+            ConditionalDataModel model = new ConditionalDataModel();
+            return View("ConditionalSearch", model);
+        }
+
+        [HttpPost]
+        public ActionResult ConditionalSearch(ConditionalDataModel model)
+        {
+            return View(model);
         }
 
     }

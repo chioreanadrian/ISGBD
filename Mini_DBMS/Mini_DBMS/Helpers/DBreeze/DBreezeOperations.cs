@@ -45,16 +45,15 @@ namespace Mini_DBMS.Helpers.DBreeze
         {
             using (var transaction = dBreeze.GetTransaction())
             {
-                foreach(var t in currentDatabase.Tables)
-                    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
-                        return;
-                
+                //foreach(var t in currentDatabase.Tables)
+                //    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
+                //        return;               
 
                 transaction.RemoveKey(query.From, query.PrimaryKey);
                 transaction.Commit();
                 var row = transaction.Select<string, string>(query.From, query.PrimaryKey);
                 if (!row.Exists)
-                    Debug.WriteLine("deleted item with success");
+                    Debug.WriteLine("item deleted with success");
             }
         }
 
