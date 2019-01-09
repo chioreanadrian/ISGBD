@@ -41,20 +41,39 @@ namespace Mini_DBMS.Helpers.DBreeze
             }
         }
 
-        public static void DeleteData(DBreezeEngine dBreeze, SimpleQuery query, Table currentTable, Database currentDatabase)
+        public static bool DeleteData(DBreezeEngine dBreeze, SimpleQuery query, Table currentTable, Database currentDatabase)
         {
             using (var transaction = dBreeze.GetTransaction())
             {
-                //foreach(var t in currentDatabase.Tables)
-                //    if (t.ForeignKeys.Count(c => c.OriginTable == currentTable.Name) > 0)
-                //        return;               
+                var dataToDelete = GetAllData(dBreeze, currentTable.Name).FirstOrDefault(x => x.Key == query.PrimaryKey);
+
+                if (dataToDelete.Key == null)
+                {
+                    return true;
+                }
+                foreach (var foreignKey in currentTable.ForeignKeys)
+                {
+                    var data = GetAllData(dBreeze, foreignKey.OriginTable);
+                    foreach(var pair in data)
+                        if (dataToDelete.Value.Split('#').Contains(pair.Value))
+                        {
+                            Debug.WriteLine("Can't delete! It's a foreign key!");
+                            return false;
+                        }
+                }
+            
 
                 transaction.RemoveKey(query.From, query.PrimaryKey);
                 transaction.Commit();
                 var row = transaction.Select<string, string>(query.From, query.PrimaryKey);
                 if (!row.Exists)
+                {
                     Debug.WriteLine("item deleted with success");
+                    return true;
+                }
             }
+
+            return true;
         }
 
         public static Dictionary<string, string> GetAllData(DBreezeEngine dBreeze, string tableName)
@@ -76,14 +95,16 @@ namespace Mini_DBMS.Helpers.DBreeze
 
             using (var transaction = dBreeze.GetTransaction())
             {
-                if (dBreeze.Scheme.IfUserTableExists(table.Name))
+                if (dBreeze.Scheme.IfUserTableExists(field)) // search after index
+                {
+                    foreach (var row in transaction.SelectForward<string, string>(field))
+                        dic.Add(row.Key, row.Value);
+                }
+                else if (dBreeze.Scheme.IfUserTableExists(table.Name)) // search after table
                 {
                     foreach (var row in transaction.SelectForward<string, string>(table.Name))
                         dic.Add(row.Key, row.Value);
                 }
-                else
-                    foreach (var row in transaction.SelectForward<string, string>(table.Name))
-                        dic.Add(row.Key, row.Value);
             }
 
             var returnDic = new Dictionary<string, string>();

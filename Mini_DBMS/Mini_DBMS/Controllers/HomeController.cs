@@ -279,7 +279,14 @@ namespace Mini_DBMS.Controllers
             }
             else
             {
-                DBreezeOperations.DeleteData(_dBreeze, query, _currentTable,_currentDatabase);
+                var deleted = DBreezeOperations.DeleteData(_dBreeze, query, _currentTable,_currentDatabase);
+
+                if (!deleted)
+                {
+                    ModelState.AddModelError("", "Can't delete! Its a parent table!!!");
+                    return View("_DeleteData", query);
+                    //return Json(new {status = "error", message = "Message error"});
+                }
             }
             _currentTable.DataList = DBreezeOperations.GetAllData(_dBreeze, _currentTable.Name);
 

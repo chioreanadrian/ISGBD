@@ -24,6 +24,8 @@
     <fieldset>
         @Html.HiddenFor(m => m.From)
         @Html.HiddenFor(m => m.Type)
+        
+        @Html.ValidationSummary()
         <div class="form-group label-static is-empty">
             <label>Primary key:</label>
             @Html.TextBoxFor(m => m.PrimaryKey, new {id = "key", @class = "form-control", placeholder = "key"})

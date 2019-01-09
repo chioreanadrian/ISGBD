@@ -56,7 +56,9 @@
           <Attribute attributeName="varsta" type="number" length="0" isnull="false" />
         </Attributes>
         <PrimaryKey>id</PrimaryKey>
-        <ForeignKeys />
+        <ForeignKeys>
+          <ForeignKey parentField="nume" refAttribute="firsstname" parentTable="table1" />
+        </ForeignKeys>
         <IndexFiles />
       </Table>
     </Tables>
